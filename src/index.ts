@@ -5,7 +5,7 @@ import {ViteDevServer} from 'vite'
 
 export default (pages:{[key:string]:any}) => {
   return {
-    name: '@yh/vite-plugin-virtual-html',
+    name: 'vite-plugin-virtual-html',
     configureServer(server: ViteDevServer) {
       server.middlewares.use(async (req, res, next) => {
         // 如果不是html则直接调用next
