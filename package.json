@@ -1,0 +1,37 @@
+{
+  "name": "vite-plugin-virtual-html",
+  "version": "0.0.1",
+  "description": "Vite plugin for html not under project root",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc -p . --skipLibCheck"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "vite",
+    "virtual-html"
+  ],
+  "author": "windson",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Windson1806/vite-plugin-virtual-html.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Windson1806/vite-plugin-virtual-html/issues"
+  },
+  "homepage": "",
+  "dependencies": {
+
+  },
+  "peerDependencies": {
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.14",
+    "typescript": "^4.1.2",
+    "vite": "^2.0.0",
+    "yorkie": "^2.0.0"
+  }
+}
