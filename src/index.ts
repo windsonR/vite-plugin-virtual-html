@@ -15,18 +15,18 @@ export default (pages:{[key:string]:any}) => {
         // 对于html来说,html文件是存放在各个页面模块内的,所以此时需要直接响应相应的html内容
         const htmlName = req.url?.replace('/', '').replace('.html', '')
         const htmlPath = pages[htmlName]
-        const html1 = await fs.readFile(path.resolve(__dirname,`.${htmlPath}`))
+        const html1 = await fs.readFile(path.resolve(process.cwd(),`.${htmlPath}`))
         res.end(html1)
       })
     },
     async closeBundle() {
       // 复制dist/src目录及其子目录下的所有html到dist目录下
-      const fileList = await readFileList(path.resolve(__dirname, './dist/src'), [])
+      const fileList = await readFileList(path.resolve(process.cwd(), './dist/src'), [])
       for (let file of fileList) {
         const filePaths = file.split('/')
-        await fs.copyFile(file, path.resolve(__dirname, `./dist/${filePaths[filePaths.length-1]}`))
+        await fs.copyFile(file, path.resolve(process.cwd(), `./dist/${filePaths[filePaths.length-1]}`))
       }
-      await fs.rmdir(path.resolve(__dirname, './dist/src'), {recursive:true})
+      await fs.rmdir(path.resolve(process.cwd(), './dist/src'), {recursive:true})
     },
   }
 }
