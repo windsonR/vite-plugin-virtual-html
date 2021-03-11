@@ -1,21 +1,28 @@
 import fs from 'fs/promises'
+import fsSync from 'fs'
 import path from 'path'
 
 import {ViteDevServer} from 'vite'
 
-export default (pages:{[key:string]:any}) => {
+export default (pages:{[key:string]:any}, index: string) => {
   return {
     name: 'vite-plugin-virtual-html',
     configureServer(server: ViteDevServer) {
       server.middlewares.use(async (req, res, next) => {
         // 如果不是html则直接调用next
-        if (!req.url?.endsWith('.html')) {
+        if (!req.url?.endsWith('.html') && req.url!=='/') {
           return next()
         }
+        let url = req.url
+        if (url === '/') {
+          const htmlPath = pages[index]
+          res.end(await readHtml(htmlPath))
+          return
+        }
         // 对于html来说,html文件是存放在各个页面模块内的,所以此时需要直接响应相应的html内容
-        const htmlName = req.url?.replace('/', '').replace('.html', '')
+        const htmlName = url?.replace('/', '').replace('.html', '')
         const htmlPath = pages[htmlName]
-        const html1 = await fs.readFile(path.resolve(process.cwd(),`.${htmlPath}`))
+        const html1 = await readHtml(htmlPath)
         res.end(html1)
       })
     },
@@ -44,5 +51,9 @@ async function readFileList(src: string, filesList: Array<string>) {
     }
   }
   return filesList
+}
+
+async function readHtml(htmlPath:string) {
+  return await fs.readFile(path.resolve(process.cwd(),`.${htmlPath}`))
 }
 
