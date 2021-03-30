@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-virtual-html",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Vite plugin for html not under project root",
   "main": "dist/index.js",
   "scripts": {
@@ -23,15 +23,13 @@
     "url": "https://github.com/Windson1806/vite-plugin-virtual-html/issues"
   },
   "homepage": "",
-  "dependencies": {
-
-  },
-  "peerDependencies": {
-  },
   "devDependencies": {
     "@types/node": "^14.0.14",
+    "@vitejs/plugin-vue": "^1.2.0",
+    "@vue/compiler-sfc": "^3.0.9",
     "typescript": "^4.1.2",
     "vite": "^2.0.0",
+    "vue": "^3.0.9",
     "yorkie": "^2.0.0"
   }
 }
