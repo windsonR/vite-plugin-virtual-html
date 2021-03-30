@@ -9,7 +9,7 @@
 const virtualHtml = require('vite-plugin-virtual-html')
 
 module.exports = {
-  plugins: [virtualHtml({pages,index})],
+  plugins: [virtualHtml(pages,'index')],
 }
 ```
 
@@ -29,6 +29,7 @@ pages用于存放页面路径
 ```
 ### index
 配置index页面.
-例如,在打开`http://localhost:3000/`时,若项目根目录没有`index.html`,浏览器则会出现404错误
-即,这个配置是实现
+例如,在打开`http://localhost:3000/`时,若项目根目录没有`index.html`,浏览器则会出现404错误.默认为`index`即:
 `/` => `/index.html`
+也可以通过此配置修改默认的index页面,
+例如:,index配置为`login`时,访问`/`,实际上会获得`/login.html`的页面
