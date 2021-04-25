@@ -1,16 +1,19 @@
 {
   "name": "vite-plugin-virtual-html",
-  "version": "0.0.3",
-  "description": "Vite plugin for html not under project root",
-  "main": "dist/index.js",
+  "version": "0.0.4",
+  "description": "Vite plugin for load html which is not under project root",
+  "main": "src/index.js",
   "scripts": {
-    "build": "rm -rf dist && tsc -p . --skipLibCheck"
+    "build": "rm -rf dist && tsc -p . --skipLibCheck",
+    "test:build": "vite build",
+    "test:dev": "vite"
   },
   "files": [
-    "dist"
+    "src/index.js",
+    "src/index.d.ts"
   ],
   "keywords": [
-    "vite",
+    "vite-plugin",
     "virtual-html"
   ],
   "author": "windson",

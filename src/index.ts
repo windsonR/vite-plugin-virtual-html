@@ -1,58 +1,76 @@
 import fs from 'fs/promises'
 import path from 'path'
 
-import {ViteDevServer, Plugin,} from 'vite'
+import {Plugin, ViteDevServer} from 'vite'
 
-export default (pages: { [key: string]: any }, index: string): Plugin => {
-    return {
-        name: 'vite-plugin-virtual-html',
-        configureServer(server: ViteDevServer) {
-            server.middlewares.use(async (req, res, next) => {
-                // 如果不是html则直接调用next
-                if (!req.url?.endsWith('.html') && req.url !== '/') {
-                    return next()
-                }
-                let url = req.url
-                if (url === '/') {
-                    const htmlPath = pages[index]
-                    res.end(await readHtml(htmlPath))
-                    return
-                }
-                // 对于html来说,html文件是存放在各个页面模块内的,所以此时需要直接响应相应的html内容
-                const htmlName = url?.replace('/', '').replace('.html', '')
-                const htmlPath = pages[htmlName]
-                const html1 = await readHtml(htmlPath)
-                res.end(html1)
-            })
-        },
-        async closeBundle() {
-            // 复制dist/src目录及其子目录下的所有html到dist目录下
-            const fileList = await readFileList(path.resolve(process.cwd(), './dist/src'), [])
-            for (let file of fileList) {
-                const filePaths = file.split('/')
-                await fs.copyFile(file, path.resolve(process.cwd(), `./dist/${filePaths[filePaths.length - 1]}`))
+export default (pages: { [key: string]: any }, indexPage: string): Plugin => {
+  let outDir:string
+  return {
+    name: 'vite-plugin-virtual-html',
+    config(config, {command}) {
+      if (command === 'build') {
+        // get custom outDir config,if it is undefined use default config 'dist'
+        outDir = config.build?.outDir??'dist'
+        // inject build.rollupOptions.input from pages directly.
+        config.build = {
+          ...config.build,
+          rollupOptions: {
+            input: {
+              ...pages
             }
-            await fs.rmdir(path.resolve(process.cwd(), './dist/src'), {recursive: true})
-        },
-    }
-}
-
-async function readFileList(src: string, filesList: Array<string>) {
-
-    const files = await fs.readdir(src)
-    for (let item of files) {
-        const fullPath = path.join(src, item)
-        const stat = await fs.stat(fullPath)
-        if (stat.isDirectory()) {
-            await readFileList(path.join(src, item), filesList) //递归读取文件
-        } else {
-            filesList.push(fullPath)
+          }
         }
-    }
-    return filesList
+      }
+    },
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use(async (req, res, next) => {
+        // if request is not html , directly return next()
+        if (!req.url?.endsWith('.html') && req.url !== '/') {
+          return next()
+        }
+        let url = req.url
+        // if request / means it request indexPage page
+        // read indexPage config ,and response indexPage page
+        if (url === '/') {
+          const htmlPath = pages[indexPage]
+          res.end(await readHtml(htmlPath))
+          return
+        }
+        // for html file, it is stored in each module,so now just response its' content
+        const htmlName = url?.replace('/', '').replace('.html', '')
+        const htmlPath = pages[htmlName]
+        const html1 = await readHtml(htmlPath)
+        res.end(html1)
+      })
+    },
+    async closeBundle() {
+      const pageKeys = Object.keys(pages)
+      const pathToRemove = []
+      for (const pageKey of pageKeys) {
+        // original build html path
+        const src = path.resolve(process.cwd(), `./${outDir}/${pages[pageKey]}`)
+        const pageArr = pages[pageKey].split('/')
+        const pageName = pageArr[pageArr.length - 1]
+        // dest html path
+        const dest = path.resolve(process.cwd(), `./${outDir}/${pageName}`)
+        await fs.copyFile(src, dest)
+        pathToRemove.push(pageArr[1])
+      }
+      // remove extra folder
+      for (const toRemove of pathToRemove) {
+        // catch rmdir's exception.
+        // rmdir maybe remove a dir already remove.
+        try {
+          await fs.rmdir(path.resolve(process.cwd(), `./${outDir}/${toRemove}`), {recursive: true,})
+        } catch (e){
+
+        }
+      }
+    },
+  }
 }
 
 async function readHtml(htmlPath: string) {
-    return await fs.readFile(path.resolve(process.cwd(), `.${htmlPath}`))
+  return await fs.readFile(path.resolve(process.cwd(), `.${htmlPath}`))
 }
 
