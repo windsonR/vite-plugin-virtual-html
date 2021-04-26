@@ -2,7 +2,7 @@
 
 ## Why
 
-this plugin use `configureServer` Hook to intercept html request.
+this plugin use `configureServer` Hook to intercept html request and response the html content requested from browser.
 
 ## features 
 
