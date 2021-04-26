@@ -1,13 +1,21 @@
 # vite-plugin-virtual-html
 
-## Why
+## Motivation
 
-this plugin use `configureServer` Hook to intercept html request and response the html content requested from browser.
+vite's [MPA](https://vitejs.dev/guide/build.html#multi-page-app) unlike `@vue/cli`'s `pages` option have a configuration in dev mode.
+
+vite's html file need to place in project's root to have same behavior in dev and production mode, it makes your project's root dir looks chaotic.
+
+And if you follow vite's MPA, put other file in other directory, unlike `index.html`, you need useless middle directory(Ex. from vite's MPA doc `http://localhost:3000/nested/nested.html`) to located it.
+
+so, i write this plugin to make vite's MPA more configurable and in dev mode or production has same behavior.
+
+this plugin use vite's `configureServer` Hook to intercept html request and response the html content requested from browser.
 
 ## features 
 
-+ allow you put your html file anywhere in your project(like Webpack's plugin `html-webpack-plugin`)
-  + when you run in dev,it will intercept html requests,and response with the configuration you set.
++ allow you put your html file anywhere in your project(like `@vue/cli`'s `pages`)
+  + when you run in dev,it will intercept html requests,and response with the html content which you set in `pages`.
   + when you run build, it will simply copy all the html file under dist's sub-folder to dist.
 + auto config `build.rollupOptions.input` from pages
 
