@@ -9,6 +9,9 @@ const pages = {
 export default defineConfig({
   plugins: [
     Vue(),
-    VirtualHtml(pages, 'demo1'),
+    VirtualHtml({
+      pages,
+      indexPage: 'demo1',
+    }),
   ],
 })

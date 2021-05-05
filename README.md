@@ -16,8 +16,9 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 + allow you put your html file anywhere in your project(like `@vue/cli`'s `pages`)
   + when you run in dev,it will intercept html requests,and response with the html content which you set in `pages`.
-  + when you run build, it will simply copy all the html file under dist's sub-folder to dist.
+  + when you run build, it will copy files(reading config from `pages` options) under dist's sub-folder to dist folder, and then delete the rest html file.
 + auto config `build.rollupOptions.input` from pages
++ if your html do not have a module script import. plugin will try to add a js/ts script import using the html file's name.
 
 ## Usage
 
@@ -30,11 +31,15 @@ Add it to `vite.config.js`
 const virtualHtml = require('vite-plugin-virtual-html')
 
 const pages = {
-    index: '/src/index/index.html'
+    demo1: '/demo/demo1/demo1.html',
+    demo2: '/demo/demo2/demo2.html'
 }
 
 module.exports = {
-  plugins: [virtualHtml(pages,'index')],
+  plugins: [virtualHtml({
+  pages,
+  indexPage: 'demo'
+  })],
 }
 ```
 
