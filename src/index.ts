@@ -122,10 +122,10 @@ async function generateHtml(code: string, htmlPath: string): Promise<string> {
   const jsPath = path.resolve(htmlPath.replace('.html', '.js'))
   const tsPath = path.resolve(htmlPath.replace('.html', '.ts'))
   let realEntryPath: string = tsPath
-  if (fs.existsSync(jsPath)) {
-    realEntryPath = jsPath
-  } else if (fs.existsSync(tsPath)) {
+  if (fs.existsSync(tsPath)) {
     realEntryPath = tsPath
+  } else if (fs.existsSync(jsPath)) {
+    realEntryPath = jsPath
   } else {
     console.error(`[vite-plugin-virtual-html]: There is no such ${jsPath} or ${tsPath} exists near by ${htmlPath}`)
     return `[vite-plugin-virtual-html]: There is no such ${jsPath} or ${tsPath} exists near by ${htmlPath}`
