@@ -31,14 +31,14 @@ Add it to `vite.config.js`
 const virtualHtml = require('vite-plugin-virtual-html')
 
 const pages = {
-    demo1: '/demo/demo1/demo1.html',
-    demo2: '/demo/demo2/demo2.html'
+    index: '/src/index/index.html',
+    login: '/src/login/login.html',
 }
 
 module.exports = {
   plugins: [virtualHtml({
   pages,
-  indexPage: 'demo'
+  indexPage: 'login'
   })],
 }
 ```
@@ -68,6 +68,6 @@ Ex. when you open `http://localhost:3000`, your project's root dir has no  `inde
 now, if you set this, plugin will intercept `/` request, and response with page you set.
 
 Like this: 
-when you set `indexPage` to `demo1.html`,then you access `http://localhost:3000` in browser, it will show the `/demo1.html` page. 
+when you set `indexPage` to `login`,then you access `http://localhost:3000` in browser, it will show the `/demo1.html` page. 
 
-it equals to access `http://localhost:3000/demo1.html`.
+it equals to access `http://localhost:3000/login.html`.
