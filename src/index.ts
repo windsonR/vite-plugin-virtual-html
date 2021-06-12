@@ -43,10 +43,10 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
     configureServer(server: ViteDevServer) {
       server.middlewares.use(async (req, res, next) => {
         // if request is not html , directly return next()
-        if (!req.url?.endsWith('.html') && req.url !== '/') {
+        let url = generateUrl(req.url)
+        if (!url.endsWith('.html') && url !== '/') {
           return next()
         }
-        let url = req.url
         // if request / means it request indexPage page
         // read indexPage config ,and response indexPage page
         if (url === '/') {
@@ -98,11 +98,11 @@ async function readHtml(htmlName: string, pages: { [key: string]: any }) {
   if (!fs.existsSync(realHtmlPath)) {
     const err = `${htmlName} page is not exists,please check your pages or indexPage configuration `
     console.error(err)
-    return Buffer.alloc(err.length, err)
+    return Buffer.from(err)
   }
   return await fsp.readFile(realHtmlPath).then(async (buffer) => {
     const htmlCode = await generateHtml(buffer.toString(), realHtmlPath)
-    return Buffer.alloc(htmlCode.length, htmlCode)
+    return Buffer.from(htmlCode)
   })
 }
 
@@ -131,10 +131,23 @@ async function generateHtml(code: string, htmlPath: string): Promise<string> {
     return `[vite-plugin-virtual-html]: There is no such ${jsPath} or ${tsPath} exists near by ${htmlPath}`
   }
 
+  // fix: windows slash error
+  realEntryPath = realEntryPath.replace(/\\/g,'/')
   const basePath = path.resolve(process.cwd())
   const insertModuleScript = `
   <script type="module" src="${realEntryPath.replace(basePath, '')}"></script>
   </head>
   `
   return code.replace('</head>', insertModuleScript)
+}
+
+function generateUrl(url?:string):string{
+  if (!url) {
+    return '/'
+  }
+  // url with parameters
+  if (url.indexOf('?') > 0) {
+    return url.split('?')[0]
+  }
+  return url
 }

@@ -7,6 +7,11 @@ const pages = {
   demo2: '/demo/demo2/demo2.html',
 }
 export default defineConfig({
+  resolve:{
+    alias: {
+      'vue': 'vue/dist/vue.esm-bundler.js'
+    }
+  },
   plugins: [
     Vue(),
     VirtualHtml({
