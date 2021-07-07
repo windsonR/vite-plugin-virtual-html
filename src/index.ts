@@ -64,11 +64,11 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
       const pathToRemove = []
       for (const pageKey of pageKeys) {
         // original build html path
-        const src = path.resolve(process.cwd(), `./${outDir}/${pages[pageKey]}`)
+        const src = path.resolve(process.cwd(), `${outDir}/${pages[pageKey]}`)
         const pageArr = pages[pageKey].split('/')
         const pageName = pageArr[pageArr.length - 1]
         // dest html path
-        const dest = path.resolve(process.cwd(), `./${outDir}/${pageName}`)
+        const dest = path.resolve(process.cwd(), `${outDir}/${pageName}`)
         await fsp.copyFile(src, dest)
         pathToRemove.push(pageArr[1])
       }
@@ -77,9 +77,9 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
         // catch rmdir's exception.
         // rmdir maybe remove a dir already remove.
         try {
-          await fsp.rmdir(path.resolve(process.cwd(), `./${outDir}/${toRemove}`), {recursive: true})
+          await fsp.rmdir(path.resolve(process.cwd(), `${outDir}/${toRemove}`), {recursive: true})
         } catch (e) {
-
+          // do nothing
         }
       }
     },
