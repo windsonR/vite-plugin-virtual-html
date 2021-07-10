@@ -69,21 +69,21 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
         const pageName = pageArr[pageArr.length - 1]
         // dest html path
         const dest = path.resolve(process.cwd(), `${outDir}/${pageName}`)
-        await fsp.copyFile(src, dest)
-        pathToRemove.push(pageArr[1])
+        if (fs.existsSync(src)) {
+          await fsp.copyFile(src, dest)
+          pathToRemove.push(pageArr[1])
+        }
       }
       // remove extra folder
       for (const toRemove of pathToRemove) {
         // catch rmdir's exception.
         // rmdir maybe remove a dir already remove.
-        try {
+        if (fs.existsSync(`${outDir}/${toRemove}`)) {
           await fsp.rmdir(path.resolve(process.cwd(), `${outDir}/${toRemove}`), {recursive: true})
-        } catch (e) {
-          // do nothing
         }
       }
     },
-    async transform(code: string, id: string, ssr?: boolean): Promise<TransformResult_2> {
+    async transform(code: string, id: string): Promise<TransformResult_2> {
       if (id.endsWith('html')) {
         return generateHtml(code, id)
       }
