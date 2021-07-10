@@ -1,5 +1,7 @@
 # vite-plugin-virtual-html
 
+[中文文档](./README_ZH.md)
+
 ## Motivation
 
 vite's [MPA](https://vitejs.dev/guide/build.html#multi-page-app) unlike `@vue/cli`'s `pages` option have a configuration in dev mode.
