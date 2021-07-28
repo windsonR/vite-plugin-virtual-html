@@ -13,10 +13,10 @@
 所以，我写了这么一个插件，用于实现在`@vue/cli`时的多页面应用的行为：
 
 这个插件使用了`vite`的以下钩子：
-  + `configureServer`钩子来拦截和响应html请求
-  + `config`钩子来注入`build.rollupOptions.input`配置
-  + `closeBundle`钩子来实现`build`时的`html文件`复制及删除
-  + `transform`钩子来实现对`html文件`的处理
+  + `configureServer`: 拦截和响应html请求
+  + `config`: 注入`build.rollupOptions.input`配置
+  + `closeBundle`: 执行`build`时的`html文件`复制及删除
+  + `transform`: 对`html文件`的处理
 
 ## 功能
 
