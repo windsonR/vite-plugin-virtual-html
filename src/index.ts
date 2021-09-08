@@ -41,8 +41,8 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
       }
     },
     configureServer(server: ViteDevServer) {
-      server.middlewares.use(async (req, res, next) => {
-        // if request is not html , directly return next()
+      // let request to / handled before vite's inner middlewares.
+      server.middlewares.use('/',async (req, res, next) => {
         let url = generateUrl(req.url)
         if (!url.endsWith('.html') && url !== '/') {
           return next()
@@ -53,11 +53,22 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
           res.end(await readHtml(indexPage, pages))
           return
         }
-        // for html file, it is stored in each module,so now just response its' content
-        const htmlName = url?.replace('/', '').replace('.html', '')
-        const otherHtmlBuffer = await readHtml(htmlName, pages)
-        res.end(otherHtmlBuffer)
       })
+      
+      // other html handled after vite's inner middlewares.
+      return ()=>{
+        server.middlewares.use('/',async (req, res, next) => {
+          // if request is not html , directly return next()
+          let url = generateUrl(req.url)
+          if (!url.endsWith('.html') && url !== '/') {
+            return next()
+          }
+          // for html file, it is stored in each module,so now just response its' content
+          const htmlName = url?.replace('/', '').replace('.html', '')
+          const otherHtmlBuffer = await readHtml(htmlName, pages)
+          res.end(otherHtmlBuffer)
+        })
+      }
     },
     async closeBundle() {
       const pageKeys = Object.keys(pages)
@@ -130,7 +141,7 @@ async function generateHtml(code: string, htmlPath: string): Promise<string> {
     console.error(`[vite-plugin-virtual-html]: There is no such ${jsPath} or ${tsPath} exists near by ${htmlPath}`)
     return `[vite-plugin-virtual-html]: There is no such ${jsPath} or ${tsPath} exists near by ${htmlPath}`
   }
-
+  
   // fix: windows slash error
   realEntryPath = realEntryPath.replace(/\\/g,'/')
   const basePath = path.resolve(process.cwd())
