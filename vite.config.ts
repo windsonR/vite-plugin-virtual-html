@@ -27,7 +27,7 @@ export default defineConfig({
       },
       indexPage: 'demo1',
       render(template,data){
-        return ejs.render(template, data, {delimiter: '$'})
+        return ejs.render(template, data, {delimiter: '$', root: process.cwd()})
       }
     }),
   ],
