@@ -21,6 +21,9 @@ export default defineConfig({
           }
         },
         demo2: '/demo/demo2/demo2.html',
+        // demo2: {
+        //   html: '/demo/demo2/demo2.html'
+        // },
       },
       indexPage: 'demo1',
       render(template,data){
