@@ -8,7 +8,7 @@ import {Buffer} from 'buffer'
 /**
  * describe a page
  */
-type VirtualHtmlPage = string | { html: string, data: Record<string, any> }
+type VirtualHtmlPage = string | { html: string, data?: Record<string, any> }
 /**
  * html template render
  */
@@ -46,6 +46,7 @@ function extractHtmlPath(pages: { [p: string]: VirtualHtmlPage }) {
 }
 
 export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
+  // noinspection JSUnusedLocalSymbols
   const {
     pages,
     indexPage = 'index',
