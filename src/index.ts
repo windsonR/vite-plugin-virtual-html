@@ -81,7 +81,7 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
           }
           // if request / means it request indexPage page
           // read indexPage config ,and response indexPage page
-          if (url === '/') {
+          if (url === '/' || url.indexOf('index.html') >= 0) {
             res.end(await readHtml(indexPage, pages, render))
             return
           }
