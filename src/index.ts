@@ -8,11 +8,15 @@ import {Buffer} from 'buffer'
 /**
  *
  */
+type VirtualHtmlPage = string|{html:string, data?: any}
+/**
+ *
+ */
 type VirtualHtmlOptions = {
   /**
    * config html-entries' path
    */
-  pages: { [key: string]: any },
+  pages: { [key: string]: VirtualHtmlPage },
   /**
    * define the index page,to replace default index.html
    * this page will trigger `transformIndexHtml` hook.
@@ -23,6 +27,15 @@ type VirtualHtmlOptions = {
 export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
   const {pages, indexPage = 'index'} = virtualHtmlOptions
   let outDir: string
+  const newPages:{[key:string]:string} = {}
+  Object.keys(pages).forEach(key=>{
+    const page = pages[key]
+    if (typeof page === 'string') {
+      newPages[key]=page
+    } else {
+      newPages[key]=page.html
+    }
+  })
   return {
     name: 'vite-plugin-virtual-html',
     config(config, {command}) {
@@ -34,7 +47,7 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
           ...config.build,
           rollupOptions: {
             input: {
-              ...pages,
+              ...newPages,
             },
           },
         }
@@ -50,7 +63,7 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
         // if request / means it request indexPage page
         // read indexPage config ,and response indexPage page
         if (url === '/') {
-          res.end(await readHtml(indexPage, pages))
+          res.end(await readHtml(indexPage, newPages))
           return
         }
       })
@@ -65,18 +78,18 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
           }
           // for html file, it is stored in each module,so now just response its' content
           const htmlName = url?.replace('/', '').replace('.html', '')
-          const otherHtmlBuffer = await readHtml(htmlName, pages)
+          const otherHtmlBuffer = await readHtml(htmlName, newPages)
           res.end(otherHtmlBuffer)
         })
       }
     },
     async closeBundle() {
-      const pageKeys = Object.keys(pages)
+      const pageKeys = Object.keys(newPages)
       const pathToRemove = []
       for (const pageKey of pageKeys) {
         // original build html path
-        const src = path.resolve(process.cwd(), `${outDir}/${pages[pageKey]}`)
-        const pageArr = pages[pageKey].split('/')
+        const src = path.resolve(process.cwd(), `${outDir}/${newPages[pageKey]}`)
+        const pageArr = newPages[pageKey].split('/')
         const pageName = pageArr[pageArr.length - 1]
         // dest html path
         const dest = path.resolve(process.cwd(), `${outDir}/${pageName}`)
