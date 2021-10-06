@@ -1,13 +1,9 @@
 import {defineConfig} from 'vite'
 import VirtualHtml from './src'
 import Vue from '@vitejs/plugin-vue'
+// @ts-ignore
+import ejs from 'ejs'
 
-const pages = {
-  demo1: {
-    html: '/demo/demo1/demo1.html',
-  },
-  demo2: '/demo/demo2/demo2.html',
-}
 export default defineConfig({
   resolve:{
     alias: {
@@ -17,8 +13,19 @@ export default defineConfig({
   plugins: [
     Vue(),
     VirtualHtml({
-      pages,
+      pages: {
+        demo1: {
+          html: '/demo/demo1/demo1.html',
+          data: {
+            users: ['a','b','c']
+          }
+        },
+        demo2: '/demo/demo2/demo2.html',
+      },
       indexPage: 'demo1',
+      render(template,data){
+        return ejs.render(template, data, {delimiter: '$'})
+      }
     }),
   ],
 })

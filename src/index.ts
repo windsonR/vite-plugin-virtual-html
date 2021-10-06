@@ -6,11 +6,15 @@ import {TransformResult as TransformResult_2} from 'rollup'
 import {Buffer} from 'buffer'
 
 /**
- *
+ * describe a page
  */
-type VirtualHtmlPage = string|{html:string, data?: any}
+type VirtualHtmlPage = string | { html: string, data: Record<string, any> }
 /**
- *
+ * html template render
+ */
+type VirtualHtmlTemplateRender = (template: string, data: Record<string, any>) => string
+/**
+ * plugin's options
  */
 type VirtualHtmlOptions = {
   /**
@@ -22,20 +26,32 @@ type VirtualHtmlOptions = {
    * this page will trigger `transformIndexHtml` hook.
    */
   indexPage?: string,
+  /**
+   * function to render template
+   */
+  render?: VirtualHtmlTemplateRender
+}
+
+function extractHtmlPath(pages: { [p: string]: VirtualHtmlPage }) {
+  const newPages: { [key: string]: string } = {}
+  Object.keys(pages).forEach(key => {
+    const page = pages[key]
+    if (typeof page === 'string') {
+      newPages[key] = page
+    } else {
+      newPages[key] = page.html
+    }
+  })
+  return newPages
 }
 
 export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
-  const {pages, indexPage = 'index'} = virtualHtmlOptions
+  const {
+    pages,
+    indexPage = 'index',
+    render = (template: string, data: Record<string, any>) => template
+  } = virtualHtmlOptions
   let outDir: string
-  const newPages:{[key:string]:string} = {}
-  Object.keys(pages).forEach(key=>{
-    const page = pages[key]
-    if (typeof page === 'string') {
-      newPages[key]=page
-    } else {
-      newPages[key]=page.html
-    }
-  })
   return {
     name: 'vite-plugin-virtual-html',
     config(config, {command}) {
@@ -47,43 +63,36 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
           ...config.build,
           rollupOptions: {
             input: {
-              ...newPages,
+              ...extractHtmlPath(pages),
             },
           },
         }
       }
     },
     configureServer(server: ViteDevServer) {
-      // let request to / handled before vite's inner middlewares.
-      server.middlewares.use('/',async (req, res, next) => {
-        let url = generateUrl(req.url)
-        if (!url.endsWith('.html') && url !== '/') {
-          return next()
-        }
-        // if request / means it request indexPage page
-        // read indexPage config ,and response indexPage page
-        if (url === '/') {
-          res.end(await readHtml(indexPage, newPages))
-          return
-        }
-      })
-      
       // other html handled after vite's inner middlewares.
-      return ()=>{
-        server.middlewares.use('/',async (req, res, next) => {
+      return () => {
+        server.middlewares.use('/', async (req, res, next) => {
           // if request is not html , directly return next()
           let url = generateUrl(req.url)
           if (!url.endsWith('.html') && url !== '/') {
             return next()
           }
+          // if request / means it request indexPage page
+          // read indexPage config ,and response indexPage page
+          if (url === '/') {
+            res.end(await readHtml(indexPage, pages, render))
+            return
+          }
           // for html file, it is stored in each module,so now just response its' content
           const htmlName = url?.replace('/', '').replace('.html', '')
-          const otherHtmlBuffer = await readHtml(htmlName, newPages)
+          const otherHtmlBuffer = await readHtml(htmlName, pages, render)
           res.end(otherHtmlBuffer)
         })
       }
     },
     async closeBundle() {
+      const newPages = extractHtmlPath(pages)
       const pageKeys = Object.keys(newPages)
       const pathToRemove = []
       for (const pageKey of pageKeys) {
@@ -109,15 +118,25 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
     },
     async transform(code: string, id: string): Promise<TransformResult_2> {
       if (id.endsWith('html')) {
-        return generateHtml(code, id)
+        const fullPathArr = id.split('/')
+        const htmlName = fullPathArr[fullPathArr.length - 1].replace('.html','')
+        let data = {}
+        if (typeof pages[htmlName] === 'string') {
+          data = {}
+        } else {
+          // @ts-ignore
+          data = pages[htmlName].data
+        }
+        return generateHtml(code, id, data, render)
       }
       return code
     },
   }
 }
 
-async function readHtml(htmlName: string, pages: { [key: string]: any }) {
-  const htmlPath = pages[htmlName]
+async function readHtml(htmlName: string, pages: { [key: string]: VirtualHtmlPage }, render: VirtualHtmlTemplateRender) {
+  const newPages = extractHtmlPath(pages)
+  const htmlPath = newPages[htmlName]
   const realHtmlPath = path.resolve(process.cwd(), `.${htmlPath}`)
   if (!fs.existsSync(realHtmlPath)) {
     const err = `${htmlName} page is not exists,please check your pages or indexPage configuration `
@@ -125,7 +144,14 @@ async function readHtml(htmlName: string, pages: { [key: string]: any }) {
     return Buffer.from(err)
   }
   return await fsp.readFile(realHtmlPath).then(async (buffer) => {
-    const htmlCode = await generateHtml(buffer.toString(), realHtmlPath)
+    let data
+    if (typeof pages[htmlName] === 'string') {
+      data = {}
+    } else {
+      // @ts-ignore
+      data = pages[htmlName].data
+    }
+    const htmlCode = await generateHtml(buffer.toString(), realHtmlPath, data, render)
     return Buffer.from(htmlCode)
   })
 }
@@ -134,14 +160,16 @@ async function readHtml(htmlName: string, pages: { [key: string]: any }) {
  * add module script import
  * @param code
  * @param htmlPath
+ * @param data
+ * @param render
  */
-async function generateHtml(code: string, htmlPath: string): Promise<string> {
+async function generateHtml(code: string, htmlPath: string, data?: Record<string, any>, render?: VirtualHtmlTemplateRender): Promise<string> {
   const viteScriptSrcRegex = /src=['"]\/.*\.(js|ts)['"]/
   // is the html code contains src='/a/b/c.js' or src='/a/b/c.ts',if it contains ,then return code directly
   // it means, the html code has the vite's js entry.
   // otherwise, auto inject the js/ts file near by the html file, and use the html's name
-  if ( viteScriptSrcRegex.test(code)) {
-    return code
+  if (viteScriptSrcRegex.test(code)) {
+    return renderTemplate(code, data, render)
   }
   const jsPath = path.resolve(htmlPath.replace('.html', '.js'))
   const tsPath = path.resolve(htmlPath.replace('.html', '.ts'))
@@ -156,16 +184,29 @@ async function generateHtml(code: string, htmlPath: string): Promise<string> {
   }
   
   // fix: windows slash error
-  realEntryPath = realEntryPath.replace(/\\/g,'/')
+  realEntryPath = realEntryPath.replace(/\\/g, '/')
   const basePath = path.resolve(process.cwd())
   const insertModuleScript = `
   <script type="module" src="${realEntryPath.replace(basePath, '')}"></script>
   </head>
   `
-  return code.replace('</head>', insertModuleScript)
+  return renderTemplate(code.replace('</head>', insertModuleScript), data, render)
 }
 
-function generateUrl(url?:string):string{
+/**
+ * use custom render function to render template
+ * @param template
+ * @param data
+ * @param render
+ */
+function renderTemplate(template: string, data?: Record<string, any>, render?: VirtualHtmlTemplateRender) {
+  if (render && data) {
+    return render(template, data)
+  }
+  return template
+}
+
+function generateUrl(url?: string): string {
   if (!url) {
     return '/'
   }
