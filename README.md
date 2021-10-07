@@ -62,7 +62,7 @@ It will be used for:
 + dev mode: It will intercept your html request and return a response with the content of the html file from this config.
 + build mode: inject into `build.rollupOptions.input`
 + build mode: It will copy the html file(s) set in this config to the `dist` folder and delete the (useless) folder(s) which store(s) the html file(s).
-+ If you want to use a template system (like `ejs`), you can send an object to the `render` function, which contains `html` and `data` to render. By default the `render` function will simply return the html content of the html template. But if vite's `render` function returns a render function from a template system you include, then the html template will be generated according to the workings of the chosen template system (e.g. if you use partials, the path to those partials will be resolved and their content integrated into the html template). Please have a 
++ If you want to use a template system (like `ejs`), you can send an object to the `render` function, which contains `html` and `data` to render. By default the `render` function will simply return the html content of the html template. But if vite's `render` function returns a render function from a template system you include, then the html template will be generated according to the workings of the chosen template system (e.g. if you use partials, the path to those partials will be resolved and their content integrated into the html template).
 
 ```
 // Configure the `pages` object
@@ -106,6 +106,7 @@ Configure the index page. This can be any page that is configured in the `pages`
 For example: If you navigate to `http://localhost:3000` and there is not `index.html` file in your project's root directory, the browser will show a `404` page. However, if you configure `indexPage` and point ot to the key of one of your `pages` objects, then the plugin will instead intercept the `/` request and provide a response with the content of that very page you've defined.
 
 Example:
+
 Set `indexPage` to `login`, then browse to `http://localhost:3000`.
 The `/login.html` page will be shown. 
 
