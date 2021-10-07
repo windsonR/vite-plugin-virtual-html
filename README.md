@@ -111,6 +111,6 @@ The `/login.html` page will be shown.
 
 This is equivalent to navigating to `http://localhost:3000/login.html`.
 
-### Extend vite's `render` function
+### The `render` function
 
-Since version `0.1.0` you can use the `render` function to render html templates. Currently this is only tested with the `ejs` templating system, but it should work with any other template system as well.
+Since version `0.1.0` you can use the `render` function to render html templates created with other templating systems (like ejs, handlebars, etc). Currently this is only tested with the `ejs` templating system, but it should work with any other template system as well.
