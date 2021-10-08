@@ -6,7 +6,7 @@ import {TransformResult as TransformResult_2} from 'rollup'
 import {Buffer} from 'buffer'
 
 /**
- * Describe a page.
+ * describe a page
  */
 type VirtualHtmlPage = string | { html: string, data?: Record<string, any> }
 /**
@@ -22,8 +22,8 @@ type VirtualHtmlOptions = {
    */
   pages: { [key: string]: VirtualHtmlPage },
   /**
-   * Define the index page to replace the default index.html with.
-   * This page will trigger the `transformIndexHtml` hook.
+   * define the index page,to replace default index.html
+   * this page will trigger `transformIndexHtml` hook.
    */
   indexPage?: string,
   /**
@@ -140,7 +140,7 @@ async function readHtml(htmlName: string, pages: { [key: string]: VirtualHtmlPag
   const htmlPath = newPages[htmlName]
   const realHtmlPath = path.resolve(process.cwd(), `.${htmlPath}`)
   if (!fs.existsSync(realHtmlPath)) {
-    const err = `${htmlName} page does not exist, please check your pages or indexPage configuration.`
+    const err = `${htmlName} page is not exists,please check your pages or indexPage configuration `
     console.error(err)
     return Buffer.from(err)
   }
@@ -166,9 +166,9 @@ async function readHtml(htmlName: string, pages: { [key: string]: VirtualHtmlPag
  */
 async function generateHtml(code: string, htmlPath: string, data?: Record<string, any>, render?: VirtualHtmlTemplateRender): Promise<string> {
   const viteScriptSrcRegex = /src=['"]\/.*\.(js|ts)['"]/
-  // Does the html code contain src='/a/b/c.js' or src='/a/b/c.ts' then return the code directly,
-  // because that means that the html code already contains vite's js entry.
-  // Otherwise auto-inject the js/ts file next to the html file and use the html's name
+  // is the html code contains src='/a/b/c.js' or src='/a/b/c.ts',if it contains ,then return code directly
+  // it means, the html code has the vite's js entry.
+  // otherwise, auto inject the js/ts file near by the html file, and use the html's name
   if (viteScriptSrcRegex.test(code)) {
     return renderTemplate(code, data, render)
   }
@@ -180,8 +180,8 @@ async function generateHtml(code: string, htmlPath: string, data?: Record<string
   } else if (fs.existsSync(jsPath)) {
     realEntryPath = jsPath
   } else {
-    console.error(`[vite-plugin-virtual-html]: Neither ${jsPath} nor ${tsPath} exist next to ${htmlPath}.`)
-    return `[vite-plugin-virtual-html]: Neither ${jsPath} nor ${tsPath} exist next to ${htmlPath}`
+    console.error(`[vite-plugin-virtual-html]: There is no such ${jsPath} or ${tsPath} exists near by ${htmlPath}`)
+    return `[vite-plugin-virtual-html]: There is no such ${jsPath} or ${tsPath} exists near by ${htmlPath}`
   }
   
   // fix: windows slash error

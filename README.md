@@ -4,31 +4,27 @@
 
 ## Motivation
 
-Much like `@vue/cli`'s `pages` option, vite's [MPA](https://vitejs.dev/guide/build.html#multi-page-app) option can be configured in dev mode. However, there are some restrictions:
+vite's [MPA](https://vitejs.dev/guide/build.html#multi-page-app) unlike `@vue/cli`'s `pages` option have a configuration in dev mode.
 
-Vite's html files need to be placed in the project's root folder in order to have the same behavior in dev and production mode. This makes your project's root directory look chaotic.
+vite's html file need to place in project's root to have same behavior in dev and production mode, it makes your project's root dir looks chaotic.
 
-And if you follow vite's documentation for creating a MPA and put a file in another directory, a (useless) middle directory is needed to locate it (see [Multi-Page App](http://localhost:3000/nested/nested.html)).
+And if you follow vite's MPA, put other file in other directory, unlike `index.html`, you need useless middle directory(Ex. from vite's MPA doc `http://localhost:3000/nested/nested.html`) to located it.
 
-Therefore I wrote this plugin to make vite's MPA more configurable while conserving the same behavior in dev and production mode.
+so, i write this plugin to make vite's MPA more configurable and in dev mode or production has same behavior.
 
-This plugin uses vite's `configureServer` hook to intercept html requests and eventually return a response with the html content requested from browser.
+this plugin use vite's `configureServer` Hook to intercept html request and response the html content requested from browser.
 
-## Features 
+## features 
 
-+ Allows you to put your html files anywhere in your project (like `@vue/cli`'s `pages`)
-  + when you run dev, it will intercept html requests and provide a response with the html content which you set in `pages`.
-  + when you run build, it will copy the files configured in the `pages` options from the dist's sub-folder to dist folder, and then delete the html file.
-+ This plugin wil automaticaly configure the `build.rollupOptions.input` from vite using the `pages` object
-+ If the provided html files do not have a module script import, the plugin will try to add a js/ts script import using the html file's name.
++ allow you put your html file anywhere in your project(like `@vue/cli`'s `pages`)
+  + when you run in dev,it will intercept html requests,and response with the html content which you set in `pages`.
+  + when you run build, it will copy files(reading config from `pages` options) under dist's sub-folder to dist folder, and then delete the rest html file.
++ auto config `build.rollupOptions.input` from pages
++ if your html do not have a module script import. plugin will try to add a js/ts script import using the html file's name.
 
 ## Usage
 
-`yarn add vite-plugin-virtual-html --dev`
-
-Or:
-
-`npm install vite-plugin-virtual-html -D`
+`yarn add vite-plugin-virtual-html --dev # npm install vite-plugin-virtual-html -D`
 
 Add it to `vite.config.js`
 
@@ -37,81 +33,61 @@ Add it to `vite.config.js`
 const virtualHtml = require('vite-plugin-virtual-html')
 
 const pages = {
-  index: '/src/index/index.html',
-  login: '/src/login/login.html',
+    index: '/src/index/index.html',
+    login: '/src/login/login.html',
 }
 
 module.exports = {
-  plugins: [
-    virtualHtml({
-      pages,
-      indexPage: 'login'
-    })
-  ],
+  plugins: [virtualHtml({
+  pages,
+  indexPage: 'login'
+  })],
 }
 ```
 
 ## Configuration
 
 ### pages
+config your project's all html file's path
 
-Configure the paths to all of your project's html files.
-
-It will be used for:
-
-+ dev mode: It will intercept your html request and return a response with the content of the html file from this config.
-+ build mode: inject into `build.rollupOptions.input`
-+ build mode: It will copy the html file(s) set in this config to the `dist` folder and delete the (useless) folder(s) which store(s) the html file(s).
-+ If you want to use a template system (like `ejs`), you can send an object to the `render` function, which contains `html` and `data` to render. By default the `render` function will simply return the html content of the html template. But if the `render` function returns a itself render function from a template system you include, then the html template will be generated according to the workings of the chosen template system (e.g. if you use partials, the path to those partials will be resolved and their content integrated into the html template).
-
+it will be used for:
++ dev mode, it will intercept your html request, and response with html file in this config
++ build mode, inject into `build.rollupOptions.input`
++ build mode, it will copy html file from you set in this config under dist,and delete the useless folder which store html file.
++ if you want to use template system,you can send a object which contains `html` and `data` to render it. By default, it will return the html content that you code, but if you define a render function, it(html template) will render by your custom render function.  
 ```
-// Configure the `pages` object
-pages: { 
-  index: '/src/index/index.html',
-  login: {
-    html: '/src/login/login.html', // if there is no data param, html must not have any template content
-  },
-  login1: {
-    html: '/src/login1/login1.html', 
-    data: {
-      users: ['a', 'b', 'c']
+{ 
+    index: '/src/index/index.html',
+    login: {
+      html: '/src/login/login.html', // if there is no data param, html must not have any template content
+    },
+    login1: {
+      html: '/src/login1/login1.html', 
+      data: {
+        users: ['a', 'b', 'c']
+      }
     }
-  }
-},
-
-// Confgiure the `indexPage`option by assinging it a key of a page defined in `pages`:
-indexPage: 'login1',
-
-// Configure the render function to render the input according to the rules of a template system
-// Here `ejs` is used. It must be imported on top of the file (`import ejs form `ejs`). The example
-// shows how vite's `render` function return another `render` function, in this case `ejs.render()`
-// If you intend to use any other template system like `handlebars`, don't forget to install it
-// via npm!
-render (template, data) {
-  return ejs.render(template, data, {
-    delimiter: '%',
-    root: process.cwd()
-  })
 }
 ```
 
-**Notice:**
+**notice:**
+1. if your html page contains any template content(such as `<$= users.join(" | "); $>`), you **must** contain `html` and `data` at the same time.
 
-If your html page contains any template content (such as `<$= users.join(" | "); $>`), you **must** configure `html` and `data` at the same time.
+### indexPage
 
-### Configure `indexPage`
+config the index page
 
-Configure the index page. This can be any page that is configured in the `pages` option. This is very helpful, when your project structure does not provide an `index.html` file in your project's root folder.
+Ex. when you open `http://localhost:3000`, your project's root dir has no  `index.html` file, then browser will show `404`.
 
-For example: If you navigate to `http://localhost:3000` and there is not `index.html` file in your project's root directory, the browser will show a `404` page. However, if you configure `indexPage` and point ot to the key of one of your `pages` objects, then the plugin will instead intercept the `/` request and provide a response with the content of that very page you've defined.
+now, if you set this, plugin will intercept `/` request, and response with page you set.
 
-Example:
+Like this: 
+when you set `indexPage` to `login`,then you access `http://localhost:3000` in browser, it will show the `/login.html` page. 
 
-Set `indexPage` to `login`, then browse to `http://localhost:3000`.
-The `/login.html` page will be shown. 
+it equals to access `http://localhost:3000/login.html`.
 
-This is equivalent to navigating to `http://localhost:3000/login.html`.
 
-### The `render` function
+### render 
 
-Since version `0.1.0` you can use the `render` function to render html templates created with other templating systems (like ejs, handlebars, etc). Currently this is only tested with the `ejs` templating system, but it should work with any other template system as well.
+from `0.1.0` , you can use `render` function to render html template.
+i have just test in `ejs`, but i think other template system will(maybe) work fine.
