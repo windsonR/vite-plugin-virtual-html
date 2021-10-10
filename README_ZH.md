@@ -52,19 +52,34 @@ module.exports = {
 ## 配置
 
 ### pages
-配置你的项目所有可用的html文件的路径，
+
+配置你的项目所有可用的html文件的路径
+
 这个配置需要传入一个json对象，这个json对象可以通过任何方式进行获得，可以直接写固定的配置，也可以通过`glob`等方式进行获取
+
+json对象的每个值,可以是字符串(指向某个html文件),也可以是一个包含`html`值(指向某个html文件)的对象,如果有需要(需要使用模板时),也可以传入`data`值(任意类型)
 
 这个配置将在以下地方使用:
 + dev模式，在浏览器请求html文件时，将会返回这里配置的html文件的内容
 + build模式，注入配置到 `build.rollupOptions.input`
 + build模式，在最终生成编译后文件后，将会复制dist目录下相应子目录中的html文件到dist目录下，然后将子目录删除.
++ 如果你希望使用HTML模板(比如`ejs`等),那么,你需要将原本的html路径修改为如下示例中的`login1`,即,同时传入一个包含`html`和`data`的对象,并且需要自定义渲染函数(`render`)
 ```
 { 
     index: '/src/index/index.html',
-    login: '/src/login/login.html',
+    login: {
+      html: '/src/login/login.html', // 如果没有data参数时,html文件不能包含任何模板内容
+    },
+    login1: {
+      html: '/src/login1/login1.html',
+      data: {
+        users: ['a', 'b', 'c']
+      }
+    }
 }
 ```
+**注意:**
+1. 如果 html文件包含任何模板内容(比如`<$= users.join(" | "); $>`),那么配置时,**必须**同时包含`html` 和 `data`配置
 
 ### indexPage
 
@@ -78,3 +93,9 @@ module.exports = {
 当你将 `indexPage` 设置为 `login`时,你在浏览器中访问 `http://localhost:3000` 将会显示 `/login.html` 页面的内容.
 
 就相当于你访问了 `http://localhost:3000/login.html`.
+
+### render
+
+从`0.1.0`版本开始,你可以使用`render`函数来自定义模板渲染方式.
+
+目前我只测试了`ejs`,但是我猜其他的模板系统应该都能正常工作.

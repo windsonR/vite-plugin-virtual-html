@@ -54,12 +54,24 @@ it will be used for:
 + dev mode, it will intercept your html request, and response with html file in this config
 + build mode, inject into `build.rollupOptions.input`
 + build mode, it will copy html file from you set in this config under dist,and delete the useless folder which store html file.
++ if you want to use template system,you can send a object which contains `html` and `data` to render it. By default, it will return the html content that you code, but if you define a render function, it(html template) will render by your custom render function.  
 ```
 { 
     index: '/src/index/index.html',
-    login: '/src/login/login.html',
+    login: {
+      html: '/src/login/login.html', // if there is no data param, html must not have any template content
+    },
+    login1: {
+      html: '/src/login1/login1.html', 
+      data: {
+        users: ['a', 'b', 'c']
+      }
+    }
 }
 ```
+
+**notice:**
+1. if your html page contains any template content(such as `<$= users.join(" | "); $>`), you **must** contain `html` and `data` at the same time.
 
 ### indexPage
 
@@ -73,3 +85,9 @@ Like this:
 when you set `indexPage` to `login`,then you access `http://localhost:3000` in browser, it will show the `/login.html` page. 
 
 it equals to access `http://localhost:3000/login.html`.
+
+
+### render 
+
+from `0.1.0` , you can use `render` function to render html template.
+i have just test in `ejs`, but i think other template system will(maybe) work fine.
