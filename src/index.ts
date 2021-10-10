@@ -75,7 +75,7 @@ export default (virtualHtmlOptions: VirtualHtmlOptions): Plugin => {
       return () => {
         server.middlewares.use('/', async (req, res, next) => {
           // if request is not html , directly return next()
-          let url = generateUrl(req.url)
+          let url = decodeURI(generateUrl(req.url))
           if (!url.endsWith('.html') && url !== '/') {
             return next()
           }
