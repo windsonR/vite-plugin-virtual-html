@@ -14,6 +14,15 @@ so, i write this plugin to make vite's MPA more configurable and in dev mode or 
 
 this plugin use vite's `configureServer` Hook to intercept html request and response the html content requested from browser.
 
+
+## update
+1. `0.2.0` has reworked, so config have a little change
+   1. plugin does not require your html exists, but you must provide a template file(as html)
+   2. `page`'s config renamed to `template`
+   3. each `page` can have a independent `render` function
+   4. add a global config `data`, its' config will be covered by `page`'s `data`
+   5. all you `pages`' will be treat as template file
+
 ## features 
 
 + allow you put your html file anywhere in your project(like `@vue/cli`'s `pages`)
@@ -48,30 +57,41 @@ module.exports = {
 ## Configuration
 
 ### pages
-config your project's all html file's path
+config your project's all html/template file's path
 
 it will be used for:
 + dev mode, it will intercept your html request, and response with html file in this config
 + build mode, inject into `build.rollupOptions.input`
-+ build mode, it will copy html file from you set in this config under dist,and delete the useless folder which store html file.
-+ if you want to use template system,you can send a object which contains `html` and `data` to render it. By default, it will return the html content that you code, but if you define a render function, it(html template) will render by your custom render function.  
++ when you build, plugin will copy all your config pages to project ROOT, and when build finished, the copied HTML file will auto remove from project ROOT.
++ if you want to use template system,you can send a object which contains `template` and `data` to render it. By default, it will return the html content in your HTML/template file, when you define a render function, it(html template) will rendered by your custom render function.  
 ```
+// all config 
 { 
-    index: '/src/index/index.html',
-    login: {
-      html: '/src/login/login.html', // if there is no data param, html must not have any template content
+    // 1. directly input html/template path
+    login1: '/src/index/index.html', 
+    // 2. a object with template
+    login2: {
+      template: '/src/login/login.html', // if there is no data prop, the login.html must only contain HTML content
     },
-    login1: {
-      html: '/src/login1/login1.html', 
+    // 3. a object with template and data, maybe with render
+    login3: {
+      template: '/src/login1/login1.html',
       data: {
         users: ['a', 'b', 'c']
-      }
+      },
+      // each page can have independent render function
+      // render(template, data){
+      //   return template
+      // }
     }
 }
 ```
 
 **notice:**
-1. if your html page contains any template content(such as `<$= users.join(" | "); $>`), you **must** contain `html` and `data` at the same time.
+1. if your html page contains any template content(such as `<$= users.join(" | "); $>`), you **must** contain `template` and `data`.
+2. The `pages` options' `key` is the real HTML file after build
+3. The `pages` options' `key` and `value`/ `template` file's name can different.
+4. for example 1, you can access `login1.html` when `dev` mode, and it will generate a `login1.html` when build. 
 
 ### indexPage
 
@@ -90,4 +110,10 @@ it equals to access `http://localhost:3000/login.html`.
 ### render 
 
 from `0.1.0` , you can use `render` function to render html template.
-i have just test in `ejs`, but i think other template system will(maybe) work fine.
+i have just test in `ejs`, but i think other template system will(maybe) work correctly.
+
+
+## NOTICE
+
+1. if you use same `template` file for multiple page, plese make sure the page's key is different.
+2. please DO NOT use this plugin when you build a library(you can use this in dev NOT in build)

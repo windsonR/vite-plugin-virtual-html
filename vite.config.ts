@@ -1,5 +1,5 @@
 import {defineConfig} from 'vite'
-import VirtualHtml from './src'
+import VirtualHtml from './src/plugin'
 import Vue from '@vitejs/plugin-vue'
 // @ts-ignore
 import ejs from 'ejs'
@@ -14,16 +14,27 @@ export default defineConfig({
     Vue(),
     VirtualHtml({
       pages: {
+        // demo1 is the html name you access in browser
         demo1: {
-          html: '/demo/demo1/demo1.html',
+          template: '/demo/demo1/demo1.html',
           data: {
             users: ['a','b','c']
           }
         },
         demo2: '/demo/demo2/demo2.html',
         // demo2: {
-        //   html: '/demo/demo2/demo2.html'
+        //   template: '/demo/demo2/demo2.html'
         // },
+        demo3: '/demo3.html',
+        demo4: {
+          template: '/demo/template.html',
+          data: {
+            script: '/demo/demo1/demo1.ts'
+          }
+        },
+      },
+      data:{
+
       },
       indexPage: 'demo1',
       render(template,data){
