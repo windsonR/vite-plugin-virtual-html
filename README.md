@@ -16,6 +16,7 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 
 ## update
+1. `0.2.1` now works fine with `@vitejs/plugin-react`.
 1. `0.2.0` has reworked, so config have a little change
    1. plugin does not require your html exists, but you must provide a template file(as html)
    2. `page`'s config renamed to `template`
