@@ -29,19 +29,16 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
           }
           // if request / means it request indexPage page
           // read indexPage config ,and response indexPage page
+          let page
           if (url === '/' || url.indexOf('index.html') >= 0) {
-            const page = await generatePageOptions(pages[indexPage], globalData, globalRender)
-            res.end(await readHtml(page))
-            return
+            page = await generatePageOptions(pages[indexPage], globalData, globalRender)
+          } else {
+            page = await generatePageOptions(pages[getHtmlName(url)], globalData, globalRender)
           }
-debugger
-          const page = await generatePageOptions(pages[getHtmlName(url)], globalData, globalRender)
-          const otherHtmlBuffer = await readHtml(page)
-          res.end(otherHtmlBuffer)
+          res.end(await server.transformIndexHtml(url, await readHtml(page)))
         })
       }
     },
-
     async config(config, {command}) {
       if (command === 'build') {
         const allPage = Object.entries(pages)
