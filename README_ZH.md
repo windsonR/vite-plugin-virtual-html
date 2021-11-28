@@ -18,7 +18,8 @@
   + `closeBundle`: 执行`build`时的`html文件`复制及删除
   + `load`: 对`html文件`的处理
 
-## 不兼容提醒
+## 更新信息
+1. `0.2.1`版本，现在会在插件获取到html代码后将html代码交给`ViteDevServer`进行处理，以便使插件的html代码与`Vite`处理的html代码相同（仅作用于dev时期）（参考信息：[@vite-js/plugin-react](https://github.com/vitejs/vite/tree/main/packages/plugin-react#middleware-mode)
 1. 0.2.0版本对插件的大部分代码进行了重构，配置发生了一点小小的变化
    1. 插件不再要求你的html文件必须存在，但是要求你必须配置一个template文件（html）
    2. 属性名称变更：`pages[key].html`=>`page[key].template`
