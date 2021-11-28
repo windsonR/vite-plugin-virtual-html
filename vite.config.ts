@@ -29,7 +29,7 @@ export default defineConfig({
         demo4: {
           template: '/demo/template.html',
           data: {
-            script: '/demo/demo1/demo1.ts'
+            script: '<script type="module" src="/demo/demo1/demo1.ts"></script>'
           }
         },
       },
