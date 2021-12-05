@@ -1,3 +1,5 @@
+import { normalizePath } from 'vite'
+
 export type PageObject = {
   template: string,
   data?: VirtualHtmlTemplateData,
@@ -36,8 +38,9 @@ export type PluginOptions = {
   render?: VirtualHtmlTemplateRender
 }
 
+// noinspection JSUnusedLocalSymbols
 export function defaultRender(template: string, data: Record<string, any>){
   return template
 }
 
-export const cwd = process.cwd().replaceAll('\\', '/')
+export const cwd = normalizePath(process.cwd())

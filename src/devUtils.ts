@@ -36,8 +36,7 @@ export function generateUrl(url?: string): string {
  */
 export async function readHtml({template = '', data = {}, render = defaultRender}: PageObject) {
   const templatePath = path.resolve(cwd, `.${template}`)
-  const templatePathExists = fs.existsSync(templatePath)
-  if (!templatePathExists) {
+  if (!fs.existsSync(templatePath)) {
     console.error('template must exist!')
     return ''
   }
