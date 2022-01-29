@@ -1,19 +1,26 @@
 // noinspection UnnecessaryLocalVariableJS
 
 import {Plugin, ViteDevServer} from 'vite'
-import {cwd, PluginOptions} from './types'
+import {cwd, Pages, PluginOptions} from './types'
 import {generatePageOptions, generateUrl, readHtml} from './devUtils'
 import {extractHtmlPath, getHtmlName} from './buildUtils'
 import path from 'path'
 import fs, {promises as fsp} from 'fs'
+import {findAllHtmlInProject} from './utils'
 
 export default (virtualHtmlOptions: PluginOptions): Plugin => {
   const {
-    pages,
+    pages: pagesObj,
     indexPage = 'index',
     render: globalRender = (template: string) => template,
     data: globalData = {},
   } = virtualHtmlOptions
+  let pages: Pages
+  if (pagesObj === true || pagesObj === undefined) {
+    pages = findAllHtmlInProject()
+  } else {
+    pages = pagesObj
+  }
   let distDir: string
   const needRemove:Array<string> = []
   return {

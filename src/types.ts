@@ -15,14 +15,17 @@ export type VirtualHtmlPage = string | PageObject
 export type VirtualHtmlTemplateRender = (template: string, data: Record<string, any>) => string
 
 export type VirtualHtmlTemplateData = Record<string, any>
+
+export type Pages = { [key: string]: VirtualHtmlPage }
 /**
  * plugin config options
  */
 export type PluginOptions = {
   /**
    * config html-entries' path
+   * if it is true, plugin will use glob to find all the html page in project to generate a json like {a: /src/a/a.html,}
    */
-  pages: { [key: string]: VirtualHtmlPage },
+  pages?: Pages | true,
   /**
    * define the index page,to replace default index.html
    * this page will trigger `transformIndexHtml` hook.

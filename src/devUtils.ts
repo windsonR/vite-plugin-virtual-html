@@ -82,6 +82,7 @@ export async function generatePageOptions(page: VirtualHtmlPage, globalData: Rec
       render: globalRender,
     }
   }
+  // todo
   const {data = {}, render, template} = page
   return {
     template: template,
