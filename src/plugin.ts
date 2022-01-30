@@ -1,6 +1,5 @@
 // noinspection UnnecessaryLocalVariableJS
-
-import {Plugin, ViteDevServer} from 'vite'
+import {normalizePath, Plugin, ViteDevServer} from 'vite'
 import {cwd, Pages, PluginOptions} from './types'
 import {generatePageOptions, generateUrl, readHtml} from './devUtils'
 import {extractHtmlPath, getHtmlName} from './buildUtils'
@@ -22,7 +21,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
     pages = pagesObj
   }
   let distDir: string
-  const needRemove:Array<string> = []
+  const needRemove: Array<string> = []
   return {
     name: 'vite-plugin-virtual-html',
     configureServer(server: ViteDevServer) {
@@ -36,13 +35,15 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
           }
           // if request / means it request indexPage page
           // read indexPage config ,and response indexPage page
-          let page
+          let page: string
           if (url === '/' || url.indexOf('index.html') >= 0) {
-            page = await generatePageOptions(pages[indexPage], globalData, globalRender)
+            // @ts-ignore
+            page = await this.load(normalizePath(`/${indexPage}.html`)) ?? ''
           } else {
-            page = await generatePageOptions(pages[getHtmlName(url)], globalData, globalRender)
+            // @ts-ignore
+            page = await this.load(url) ?? ''
           }
-          res.end(await server.transformIndexHtml(url, await readHtml(page)))
+          res.end(await server.transformIndexHtml(url, page))
         })
       }
     },
@@ -50,12 +51,12 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
       if (command === 'build') {
         const allPage = Object.entries(pages)
         // copy all html which is not under project root
-        for (const [key,value] of allPage) {
+        for (const [key, value] of allPage) {
           const pageOption = await generatePageOptions(value, globalData, globalRender)
           const vHtml = path.resolve(cwd, `./${key}.html`)
           if (!fs.existsSync(vHtml)) {
             needRemove.push(vHtml)
-            await fsp.copyFile(path.resolve(cwd,`.${pageOption.template}`), vHtml)
+            await fsp.copyFile(path.resolve(cwd, `.${pageOption.template}`), vHtml)
           }
         }
         console.warn('NOTICE: This plugin cannot use in library mode!')
@@ -72,13 +73,12 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         }
       }
     },
-    async load(id: string){
+    async load(id: string) {
       if (id.endsWith('html')) {
         const newId = getHtmlName(id)
         const page = await generatePageOptions(pages[newId], globalData, globalRender)
         // generate html template
-        const otherHtmlBuffer = await readHtml(page)
-        return otherHtmlBuffer
+        return await readHtml(page)
       }
       return null
     },
@@ -86,7 +86,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
       // remove files should not be under project root
       for (let vHtml of needRemove) {
         if (fs.existsSync(vHtml)) {
-          await fsp.rm(vHtml).catch(()=>{
+          await fsp.rm(vHtml).catch(() => {
             // ignore this warning
           })
         }

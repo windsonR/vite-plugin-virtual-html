@@ -1,6 +1,7 @@
 import {defineConfig} from 'vite'
 import VirtualHtml from './src/plugin'
 import Vue from '@vitejs/plugin-vue'
+import Inspect from 'vite-plugin-inspect'
 // @ts-ignore
 import ejs from 'ejs'
 
@@ -11,6 +12,9 @@ export default defineConfig({
     }
   },
   plugins: [
+    Inspect({
+      enabled: true,
+    }),
     Vue(),
     VirtualHtml({
       // pages: {
