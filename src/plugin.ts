@@ -66,8 +66,9 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         config.build = {
           ...config.build,
           rollupOptions: {
-            ...config.build.rollupOptions,
+            ...config.build?.rollupOptions,
             input: {
+              ...(config.build?.rollupOptions?.input as object),
               ...extractHtmlPath(pages),
             },
           },
