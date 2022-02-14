@@ -16,6 +16,7 @@ export function extractHtmlPath(pages: { [p: string]: VirtualHtmlPage }) {
  * get html file's name
  * @param id
  */
-export function getHtmlName(id:string){
-  return id.replace(cwd, '').substring(1,id.replace(cwd, '').length-5)
+export function getHtmlName(id:string, root?:string){
+  const _id = id.replace(cwd, '');
+  return _id.substring(1,_id.length-5).replace(root ?? '', '');
 }

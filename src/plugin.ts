@@ -1,5 +1,5 @@
 // noinspection UnnecessaryLocalVariableJS
-import {normalizePath, Plugin, ViteDevServer} from 'vite'
+import {normalizePath, Plugin, UserConfig, ViteDevServer} from 'vite'
 import {cwd, Pages, PluginOptions} from './types'
 import {generatePageOptions, generateUrl, readHtml} from './devUtils'
 import {extractHtmlPath, getHtmlName} from './buildUtils'
@@ -20,6 +20,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
   } else {
     pages = pagesObj
   }
+  let _config: UserConfig;
   let distDir: string
   const needRemove: Array<string> = []
   return {
@@ -48,12 +49,13 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
       }
     },
     async config(config, {command}) {
+      _config = config;
       if (command === 'build') {
         const allPage = Object.entries(pages)
         // copy all html which is not under project root
         for (const [key, value] of allPage) {
           const pageOption = await generatePageOptions(value, globalData, globalRender)
-          const vHtml = path.resolve(cwd, `./${key}.html`)
+          const vHtml = path.resolve(cwd, `./${config.root ?? ''}${key}.html`)
           if (!fs.existsSync(vHtml)) {
             needRemove.push(vHtml)
             await fsp.copyFile(path.resolve(cwd, `.${pageOption.template}`), vHtml)
@@ -77,7 +79,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
     },
     async load(id: string) {
       if (id.endsWith('html')) {
-        const newId = getHtmlName(id)
+        const newId = getHtmlName(id, _config?.root)
         const page = await generatePageOptions(pages[newId], globalData, globalRender)
         // generate html template
         return await readHtml(page)
