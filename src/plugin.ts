@@ -2,7 +2,7 @@
 import {normalizePath, Plugin, UserConfig, ViteDevServer} from 'vite'
 import {cwd, Pages, PluginOptions} from './types'
 import {generatePageOptions, generateUrl, readHtml} from './devUtils'
-import {extractHtmlPath, getHtmlName} from './buildUtils'
+import {addTrailingSlash, extractHtmlPath, getHtmlName} from './buildUtils'
 import path from 'path'
 import fs, {promises as fsp} from 'fs'
 import {findAllHtmlInProject} from './utils'
@@ -55,7 +55,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         // copy all html which is not under project root
         for (const [key, value] of allPage) {
           const pageOption = await generatePageOptions(value, globalData, globalRender)
-          const vHtml = path.resolve(cwd, `./${config.root ?? ''}${key}.html`)
+          const vHtml = path.resolve(cwd, `./${config.root ? addTrailingSlash(config.root) : ''}${key}.html`)
           if (!fs.existsSync(vHtml)) {
             needRemove.push(vHtml)
             await fsp.copyFile(path.resolve(cwd, `.${pageOption.template}`), vHtml)

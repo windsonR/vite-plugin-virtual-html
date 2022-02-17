@@ -1,4 +1,5 @@
 import {cwd, VirtualHtmlPage} from './types'
+import { normalizePath } from 'vite'
 
 /**
  * use pages' key as html name
@@ -17,6 +18,19 @@ export function extractHtmlPath(pages: { [p: string]: VirtualHtmlPage }) {
  * @param id
  */
 export function getHtmlName(id:string, root?:string){
+  const _root = (root ?? '').replace(cwd, '');
   const _id = id.replace(cwd, '');
-  return _id.substring(1,_id.length-5).replace(root ?? '', '');
+  const result = _id.substring(0, _id.length - '.html'.length).replace(_root !== '' ? addTrailingSlash(_root) : '', '');
+  return result.startsWith('/') ? result.substring(1) : result;
+
+}
+
+/**
+ * add trailing slash on path
+ * @param {string} path
+ * @returns {string}
+ */
+export function addTrailingSlash(path:string):string {
+  const _path = normalizePath(path.replace(cwd, ''));
+  return _path.endsWith('/') ? _path : `${_path}/`;
 }
