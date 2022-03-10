@@ -55,9 +55,10 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         // copy all html which is not under project root
         for (const [key, value] of allPage) {
           const pageOption = await generatePageOptions(value, globalData, globalRender)
-          const vHtml = path.resolve(cwd, `./${config.root ? addTrailingSlash(config.root) : ''}${key}.html`)
+          const vHtml = normalizePath(path.resolve(cwd, `./${config.root ? addTrailingSlash(config.root) : ''}${key}.html`))
           if (!fs.existsSync(vHtml)) {
             needRemove.push(vHtml)
+            await checkVirtualPath(vHtml, needRemove)
             await fsp.copyFile(path.resolve(cwd, `.${pageOption.template}`), vHtml)
           }
         }
@@ -90,11 +91,31 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
       // remove files should not be under project root
       for (let vHtml of needRemove) {
         if (fs.existsSync(vHtml)) {
-          await fsp.rm(vHtml).catch(() => {
+          await fsp.rm(vHtml, {
+            recursive: true,
+          }).catch(()=>{
             // ignore this warning
           })
         }
       }
     },
+  }
+}
+
+/**
+ * check html file's parent directory
+ * @param html
+ * @param needRemove
+ */
+async function checkVirtualPath(html:string, needRemove:Array<string>) {
+  const pathArr = html.split('/')
+  const fileName = pathArr[pathArr.length -1]
+  const middlePath = html.replace(fileName, '').replace(cwd, '')
+  const firstPath = middlePath.split('/')[1]
+  if (!fs.existsSync(middlePath)) {
+    needRemove.push(normalizePath(path.resolve(cwd, `./${firstPath}`)))
+    await fsp.mkdir(path.resolve(cwd, `./${middlePath}`),{
+      recursive: true
+    })
   }
 }
