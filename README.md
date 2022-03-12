@@ -16,6 +16,7 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 
 ## update
+1. `0.2.6` `pages` now correctly identify multi-level directories
 1. `0.2.3` `pages` options now can set to true to allow all html in project.
 2. `0.2.1` now works fine with `@vitejs/plugin-react`.
 3. `0.2.0` has reworked, so config have a little change

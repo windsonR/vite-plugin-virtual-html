@@ -4,24 +4,25 @@
 
 `vite`的[多页面应用](https://vitejs.dev/guide/build.html#multi-page-app) 与`@vue/cli`不同，`@vue/cli`有`pages`配置来配置多页面应用
 
-`@vue/cli`可以将html页面放置到项目的任意位置，然后通过`pages`配置将html页面直接生成到编译后的`dist`目录，在`vite`中要实现相同的访问方式（指 `http://localhost:8080/index.html` 此类），需要将html页面放置到项目的根目录
+`@vue/cli`可以将html页面放置到项目的任意位置，然后通过`pages`配置将`html`页面直接生成到编译后的`dist`目录，在`vite`中要实现相同的访问方式（指 `http://localhost:8080/index.html` 此类），需要将html页面放置到项目的根目录
 
 然后，如果你将html文件放置到其他目录，你就需要在访问时添加多余的中间目录（比如 `http://localhost:3000/nested/nested.html` ）
 
-同时，在打包之后，访问这些html文件也需要添加多余的中间目录，这就与`@vue/cli`有极大的不同。
+与此同时，在打包之后，访问这些`html`文件也需要添加多余的中间目录
 
-所以，我写了这么一个插件，用于实现在`@vue/cli`时的多页面应用的行为：
+所以,为了方便管理不同页面的`html`文件,就有了这么一个插件
 
 这个插件使用了`vite`的以下钩子：
   + `configureServer`: 拦截和响应html请求
-  + `config`: 注入`build.rollupOptions.input`配置
-  + `closeBundle`: 执行`build`时的`html文件`复制及删除
-  + `load`: 对`html文件`的处理
+  + `config`: 注入`build.rollupOptions.input`配置,同时根据插件的`pages`配置,将`html`文件复制到项目的根目录
+  + `closeBundle`: 删除`config`阶段复制的`html`文件及中间目录
+  + `load`: 对`html文件`的处理,包括模板文件的渲染
 
 ## 更新信息
-1. `0.2.3` `pages`选项现在可以设置为true,设置为true后,会将项目中的所有html文件都进行识别.
-1. `0.2.1`版本，现在会在插件获取到html代码后将html代码交给`ViteDevServer`进行处理，以便使插件的html代码与`Vite`处理的html代码相同（仅作用于dev时期）（参考信息：[@vite-js/plugin-react](https://github.com/vitejs/vite/tree/main/packages/plugin-react#middleware-mode)
-1. 0.2.0版本对插件的大部分代码进行了重构，配置发生了一点小小的变化
+1. `0.2.6` `pages`选项现在可以使用多级的目录
+2. `0.2.3` `pages`选项现在可以设置为`true`,设置为`true`后,会获取项目中的所有`html`文件并自动生成`pages`配置
+3. `0.2.1`版本，现在会在插件获取到html代码后将html代码交给`ViteDevServer`进行处理，以便使插件的html代码与`Vite`处理的html代码相同（仅作用于dev时期）（参考信息：[@vite-js/plugin-react](https://github.com/vitejs/vite/tree/main/packages/plugin-react#middleware-mode)
+4. 0.2.0版本对插件的大部分代码进行了重构，配置发生了一点小小的变化
    1. 插件不再要求你的html文件必须存在，但是要求你必须配置一个template文件（html）
    2. 属性名称变更：`pages[key].html`=>`page[key].template`
    3. page配置新增了一个单独的render函数

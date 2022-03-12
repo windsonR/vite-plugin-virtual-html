@@ -36,7 +36,7 @@ export default defineConfig({
             script: '<script type="module" src="/demo/demo1/demo1.ts"></script>'
           }
         },
-        'demo1/demo2/demo5': {
+        'demo1/demo2/demo5': { // multi-level directories, the last (demo5) will be the html name
           template: '/demo/template.html',
           data: {
             script: '<script type="module" src="/demo/demo1/demo1.ts"></script>'
