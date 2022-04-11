@@ -81,9 +81,11 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
     async load(id: string) {
       if (id.endsWith('html')) {
         const newId = getHtmlName(id, _config?.root)
-        const page = await generatePageOptions(pages[newId], globalData, globalRender)
-        // generate html template
-        return await readHtml(page)
+        if (pages[newId] !== undefined) {
+          const page = await generatePageOptions(pages[newId], globalData, globalRender)
+          // generate html template
+          return await readHtml(page)
+        }
       }
       return null
     },
