@@ -39,6 +39,11 @@ export type PluginOptions = {
    * function to render template
    */
   render?: VirtualHtmlTemplateRender
+  /**
+   * when pages set to true, customize fast-glob's pattern
+   * default value is ['**\\*.html', '!node_modules\\**\\*.html', '!.**\\*.html']
+   */
+  extraGlobPattern?: Array<string>
 }
 
 // noinspection JSUnusedLocalSymbols

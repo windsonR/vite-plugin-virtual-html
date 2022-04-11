@@ -16,10 +16,11 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 
 ## update
-1. `0.2.6` `pages` now correctly identify multi-level directories
-1. `0.2.3` `pages` options now can set to true to allow all html in project.
-2. `0.2.1` now works fine with `@vitejs/plugin-react`.
-3. `0.2.0` has reworked, so config have a little change
+1. `0.2.8` add a new option `extraGlobPattern` to customize `fast-glob`'s pattern. Default pattern is ['**/*.html', '!node_modules/**/*.html', '!.**/*.html']
+2. `0.2.6` `pages` now correctly identify multi-level directories
+3. `0.2.3` `pages` options now can set to true to allow all html in project.
+4. `0.2.1` now works fine with `@vitejs/plugin-react`.
+5. `0.2.0` has reworked, so config have a little change
    1. plugin does not require your html exists, but you must provide a template file(as html)
    2. `page`'s config renamed to `template`
    3. each `page` can have a independent `render` function
