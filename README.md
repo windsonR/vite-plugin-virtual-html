@@ -16,7 +16,7 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 
 ## update
-1. `0.2.8` add a new option `extraGlobPattern` to customize `fast-glob`'s pattern. Default pattern is ['**/*.html', '!node_modules/**/*.html', '!.**/*.html']
+1. `0.2.8` add a new option `extraGlobPattern` to customize `fast-glob`'s pattern. Default pattern is `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`
 2. `0.2.6` `pages` now correctly identify multi-level directories
 3. `0.2.3` `pages` options now can set to true to allow all html in project.
 4. `0.2.1` now works fine with `@vitejs/plugin-react`.
@@ -96,6 +96,7 @@ it will be used for:
 2. The `pages` options' `key` is the real HTML file after build
 3. The `pages` options' `key` and `value`/ `template` file's name can different.
 4. for example 1, you can access `login1.html` when `dev` mode, and it will generate a `login1.html` when build. 
+5. when `pages` set to `true`, the `template.html` will only generate **ONLY ONE** `html` file
 
 ### indexPage
 
@@ -116,6 +117,10 @@ it equals to access `http://localhost:3000/login.html`.
 from `0.1.0` , you can use `render` function to render html template.
 i have just test in `ejs`, but i think other template system will(maybe) work correctly.
 
+### extraGlobPattern
+
+Customize `fast-glob`'s pattern
+When set this options, it will replace default `fast-glob` pattern, it's default value is `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`
 
 ## NOTICE
 

@@ -102,6 +102,7 @@ json对象的每个值,可以是字符串(指向某个html/template文件),也�
 2. `pages`配置的`key`会作为编译后的html文件的名字
 3. `pages`配置的`key`和配置的`value`/ `template`html文件的名字可以不一样
 4. 示例1中，`dev`时可访问`login1.html`，`build`后，会生成`login1.html`而不是`index.html`,同理，其他示例也会产生以key为名字的html文件
+5. 当 `pages` 设置为 `true`, `template.html` 最终只会生成**一个**`html`文件
 
 ### indexPage
 
@@ -119,6 +120,14 @@ json对象的每个值,可以是字符串(指向某个html/template文件),也�
 ### render
 
 从`0.1.0`版本开始,你可以使用`render`函数来自定义模板渲染方式.
+
+### extraGlobPattern
+
+自定义的`fast-glob`匹配选项
+
+**注意:**
+
+设置了此项之后,将会完全替换默认的`fast-glob` 匹配选项, 这个值的默认值为`['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`
 
 目前我只测试了`ejs`,但是我猜其他的模板系统应该都能正常工作.
 
