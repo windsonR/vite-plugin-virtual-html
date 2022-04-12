@@ -48,7 +48,8 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
                         htmlCode = await this.load(url) ?? ''
                     }
                     // @ts-ignore
-                    res.end(await server.transformIndexHtml(url, await this.transform(htmlCode, url)))
+                    res.write(await server.transformIndexHtml(url, await this.transform(htmlCode, url)))
+                    next()
                 })
             }
         },
