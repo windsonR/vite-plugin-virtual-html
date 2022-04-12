@@ -1,11 +1,11 @@
 // noinspection UnnecessaryLocalVariableJS
 import {normalizePath, Plugin, UserConfig, ViteDevServer} from 'vite'
-import {cwd, Pages, PluginOptions} from './types'
+import {cwd, DEFAULT_INJECTCODE_ALL, Pages, PluginOptions} from './types'
 import {generatePageOptions, generateUrl, readHtml} from './devUtils'
 import {addTrailingSlash, extractHtmlPath, getHtmlName} from './buildUtils'
 import path from 'path'
 import fs, {promises as fsp} from 'fs'
-import {findAllHtmlInProject} from './utils'
+import {findAllHtmlInProject, generateInjectCode} from './utils'
 
 export default (virtualHtmlOptions: PluginOptions): Plugin => {
     const {
@@ -14,6 +14,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         render: globalRender = (template: string) => template,
         data: globalData = {},
         extraGlobPattern = [],
+        injectCode = {}
     } = virtualHtmlOptions
     let pages: Pages
     if (pagesObj === true || pagesObj === undefined) {
@@ -30,24 +31,39 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
             // other html handled after vite's inner middlewares.
             return () => {
                 server.middlewares.use('/', async (req, res, next) => {
-                    const url = decodeURI(generateUrl(req.url))
+                    let url = decodeURI(generateUrl(req.url))
                     // if request is not html , directly return next()
                     if (!url.endsWith('.html') && url !== '/') {
                         return next()
                     }
-                    // if request / means it request indexPage page
-                    // read indexPage config ,and response indexPage page
-                    let page: string
+                    // if request / means it request indexPage htmlCode
+                    // read indexPage config ,and response indexPage htmlCode
+                    let htmlCode: string
                     if (url === '/' || url.indexOf('index.html') >= 0) {
+                        url = `/${indexPage}.html`
                         // @ts-ignore
-                        page = await this.load(normalizePath(`/${indexPage}.html`)) ?? ''
+                        htmlCode = await this.load(normalizePath(url)) ?? ''
                     } else {
                         // @ts-ignore
-                        page = await this.load(url) ?? ''
+                        htmlCode = await this.load(url) ?? ''
                     }
-                    res.end(await server.transformIndexHtml(url, page))
+                    // @ts-ignore
+                    res.end(await server.transformIndexHtml(url, await this.transform(htmlCode, url)))
                 })
             }
+        },
+        async transform(code: string, id: string): Promise<string> {
+            if (id.indexOf('.html') >= 0) {
+                const ids = id.split('/')
+                const key = ids[ids.length - 1]
+                if (key in injectCode) {
+                    return generateInjectCode(injectCode[key], code)
+                }
+                if (DEFAULT_INJECTCODE_ALL in injectCode) {
+                    return generateInjectCode(injectCode[DEFAULT_INJECTCODE_ALL], code)
+                }
+            }
+            return code
         },
         async config(config, {command}) {
             _config = config;

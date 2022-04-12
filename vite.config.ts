@@ -4,6 +4,7 @@ import Vue from '@vitejs/plugin-vue'
 import Inspect from 'vite-plugin-inspect'
 // @ts-ignore
 import ejs from 'ejs'
+import {POS} from "./src/types";
 
 export default defineConfig({
   resolve:{
@@ -57,7 +58,19 @@ export default defineConfig({
         '!node_modules/**/*.html',
         '!.**/*.html',
         '!dist/**/*.html'
-      ]
+      ],
+      injectCode: {
+        'demo1.html':{
+          pos: POS.after,
+          find: '<head>',
+          replacement: '<script>window.dd = "dd";</script>'
+        },
+        '*':{
+          pos: POS.after,
+          find: '<head>',
+          replacement: '<script>window.dd = "bbb";</script>'
+        },
+      }
     }),
   ],
 })

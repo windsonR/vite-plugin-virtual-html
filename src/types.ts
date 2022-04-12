@@ -44,7 +44,31 @@ export type PluginOptions = {
    * default value is ['**\\*.html', '!node_modules\\**\\*.html', '!.**\\*.html']
    */
   extraGlobPattern?: Array<string>
+  /**
+   * inject code to html
+   * key: html name, can be *
+   */
+  injectCode?: Record<string, InjectCode>
 }
+
+/**
+ * inject code to tag's before or after
+ */
+export enum POS {
+  before,
+  after
+}
+
+/**
+ * inject code config
+ */
+export type InjectCode = {
+  pos: POS,
+  find: string,
+  replacement: string,
+}
+
+export const DEFAULT_INJECTCODE_ALL = '*'
 
 // noinspection JSUnusedLocalSymbols
 export function defaultRender(template: string, data: Record<string, any>){
