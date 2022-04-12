@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-virtual-html",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Vite plugin for load html which is not under project root",
   "main": "src/plugin.js",
   "scripts": {
