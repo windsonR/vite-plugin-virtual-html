@@ -19,10 +19,12 @@
   + `load`: 对`html文件`的处理,包括模板文件的渲染
 
 ## 更新信息
-1. `0.2.6` `pages`选项现在可以使用多级的目录
-2. `0.2.3` `pages`选项现在可以设置为`true`,设置为`true`后,会获取项目中的所有`html`文件并自动生成`pages`配置
-3. `0.2.1`版本，现在会在插件获取到html代码后将html代码交给`ViteDevServer`进行处理，以便使插件的html代码与`Vite`处理的html代码相同（仅作用于dev时期）（参考信息：[@vite-js/plugin-react](https://github.com/vitejs/vite/tree/main/packages/plugin-react#middleware-mode)
-4. 0.2.0版本对插件的大部分代码进行了重构，配置发生了一点小小的变化
+1. `0.2.9` 添加了一个新的配置 `injectCode` ,用于直接在`html`文件中的一些标签前后插入一些代码
+2. `0.2.8` 添加了一个新的配置`extraGlobPattern` 用于替换默认的`fast-glob`匹配项,其默认值为:  `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`,需要注意的是,如果你的配置有问题,会导致编译生产环境代码时报错: `new Error('[vite]: Rollup failed to resolve import "${id}" from "${importer}".\n'`
+3. `0.2.6` `pages`选项现在可以使用多级的目录
+4. `0.2.3` `pages`选项现在可以设置为`true`,设置为`true`后,会获取项目中的所有`html`文件并自动生成`pages`配置
+5. `0.2.1`版本，现在会在插件获取到html代码后将html代码交给`ViteDevServer`进行处理，以便使插件的html代码与`Vite`处理的html代码相同（仅作用于dev时期）（参考信息：[@vite-js/plugin-react](https://github.com/vitejs/vite/tree/main/packages/plugin-react#middleware-mode)
+6. 0.2.0版本对插件的大部分代码进行了重构，配置发生了一点小小的变化
    1. 插件不再要求你的html文件必须存在，但是要求你必须配置一个template文件（html）
    2. 属性名称变更：`pages[key].html`=>`page[key].template`
    3. page配置新增了一个单独的render函数
@@ -128,6 +130,12 @@ json对象的每个值,可以是字符串(指向某个html/template文件),也�
 **注意:**
 
 设置了此项之后,将会完全替换默认的`fast-glob` 匹配选项, 这个值的默认值为`['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`
+
+### injectCode
+
+[配置](./src/types.ts#51)
+
+在html文件中, 将`replacement` 放到 `find` 前面或后面
 
 目前我只测试了`ejs`,但是我猜其他的模板系统应该都能正常工作.
 

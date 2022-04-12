@@ -16,11 +16,12 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 
 ## update
-1. `0.2.8` add a new option `extraGlobPattern` to customize `fast-glob`'s pattern. Default pattern is `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`
-2. `0.2.6` `pages` now correctly identify multi-level directories
-3. `0.2.3` `pages` options now can set to true to allow all html in project.
-4. `0.2.1` now works fine with `@vitejs/plugin-react`.
-5. `0.2.0` has reworked, so config have a little change
+1. `0.2.9` add a new option `injectCode` to add some code before/after tag in html file
+2. `0.2.8` add a new option `extraGlobPattern` to customize `fast-glob`'s pattern. Default pattern is `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`, attention: if your config has problems, such as you didn't ignore `dist`, when build,it will occur error: `new Error('[vite]: Rollup failed to resolve import "${id}" from "${importer}".\n'`
+3. `0.2.6` `pages` now correctly identify multi-level directories
+4. `0.2.3` `pages` options now can set to true to allow all html in project.
+5. `0.2.1` now works fine with `@vitejs/plugin-react`.
+6. `0.2.0` has reworked, so config have a little change
    1. plugin does not require your html exists, but you must provide a template file(as html)
    2. `page`'s config renamed to `template`
    3. each `page` can have a independent `render` function
@@ -121,6 +122,11 @@ i have just test in `ejs`, but i think other template system will(maybe) work co
 
 Customize `fast-glob`'s pattern
 When set this options, it will replace default `fast-glob` pattern, it's default value is `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`
+
+### injectCode
+[options](./src/types.ts#51)
+
+In html file, put `replacement`before/after `find`
 
 ## NOTICE
 
