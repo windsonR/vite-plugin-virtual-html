@@ -52,7 +52,12 @@ export default defineConfig({
       render(template,data){
         return ejs.render(template, data, {delimiter: '$', root: process.cwd()})
       },
-      extraGlobPattern: ['!dist']
+      extraGlobPattern:  [
+        '**/*.html',
+        '!node_modules/**/*.html',
+        '!.**/*.html',
+        '!dist/**/*.html'
+      ]
     }),
   ],
 })
