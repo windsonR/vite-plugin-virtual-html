@@ -25,7 +25,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
     let _config: UserConfig;
     let distDir: string
     const needRemove: Array<string> = []
-    return {
+    const plugin = {
         name: 'vite-plugin-virtual-html',
         configureServer(server: ViteDevServer) {
             // other html handled after vite's inner middlewares.
@@ -42,13 +42,13 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
                     if (url === '/' || url.indexOf('index.html') >= 0) {
                         url = `/${indexPage}.html`
                         // @ts-ignore
-                        htmlCode = await this.load(normalizePath(url)) ?? ''
+                        htmlCode = await plugin.load(normalizePath(url)) ?? ''
                     } else {
                         // @ts-ignore
-                        htmlCode = await this.load(url) ?? ''
+                        htmlCode = await plugin.load(url) ?? ''
                     }
                     // @ts-ignore
-                    res.end(await server.transformIndexHtml(url, await this.transform(htmlCode, url)))
+                    res.end(await server.transformIndexHtml(url, await plugin.transform(htmlCode, url)))
                     next()
                 })
             }
@@ -66,6 +66,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
             }
             return code
         },
+        // @ts-ignore
         async config(config, {command}) {
             _config = config;
             if (command === 'build') {
@@ -120,6 +121,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
             }
         },
     }
+    return plugin
 }
 
 /**
