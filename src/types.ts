@@ -79,7 +79,7 @@ export function defaultRender(template: string, data: Record<string, any>){
   } catch (e){
     // @ts-ignore
     if (e.code === 'MODULE_NOT_FOUND') {
-      throw new Error(`Module 'ejs' is not found! Did you install it?`);
+      console.error(`Module 'ejs' is not found! Did you install it?`);
     }
   }
   return template
