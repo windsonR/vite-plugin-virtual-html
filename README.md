@@ -16,6 +16,7 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 
 ## update
+1. `0.3.0` change the behavior of `defaultRender`, if in project, it has `ejs` as dependency, it will return html code which rendered by `ejs`, otherwise it will return html code directly as old version do
 1. `0.2.9` add a new option `injectCode` to add some code before/after tag in html file
 2. `0.2.8` add a new option `extraGlobPattern` to customize `fast-glob`'s pattern. Default pattern is `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`, attention: if your config has problems, such as you didn't ignore `dist`, when build,it will occur error: `new Error('[vite]: Rollup failed to resolve import "${id}" from "${importer}".\n'`
 3. `0.2.6` `pages` now correctly identify multi-level directories

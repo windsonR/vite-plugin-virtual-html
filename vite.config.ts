@@ -50,9 +50,10 @@ export default defineConfig({
         script: '<script type="module" src="/demo/demo1/demo1.ts"></script>'
       },
       indexPage: 'demo1',
-      render(template,data){
-        return ejs.render(template, data, {delimiter: '$', root: process.cwd()})
-      },
+      // global render, from 0.3.0 it (this demo code) will auto configure in plugin, and you MUST install 'ejs' in your project to use it.
+      // render(template,data){
+      //   return ejs.render(template, data, {delimiter: '%', root: process.cwd()})
+      // },
       extraGlobPattern:  [
         '**/*.html',
         '!node_modules/**/*.html',

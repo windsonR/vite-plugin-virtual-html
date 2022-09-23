@@ -1,6 +1,6 @@
 // noinspection UnnecessaryLocalVariableJS
 import {normalizePath, Plugin, UserConfig, ViteDevServer} from 'vite'
-import {cwd, DEFAULT_INJECTCODE_ALL, Pages, PluginOptions} from './types'
+import {cwd, DEFAULT_INJECTCODE_ALL, Pages, PluginOptions, defaultRender,} from './types'
 import {generatePageOptions, generateUrl, readHtml} from './devUtils'
 import {addTrailingSlash, extractHtmlPath, getHtmlName} from './buildUtils'
 import path from 'path'
@@ -11,7 +11,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
     const {
         pages: pagesObj,
         indexPage = 'index',
-        render: globalRender = (template: string) => template,
+        render: globalRender = defaultRender,
         data: globalData = {},
         extraGlobPattern = [],
         injectCode = {}

@@ -1,4 +1,5 @@
 import { normalizePath } from 'vite'
+import ejs from 'ejs'
 
 export type PageObject = {
   template: string,
@@ -72,6 +73,15 @@ export const DEFAULT_INJECTCODE_ALL = '*'
 
 // noinspection JSUnusedLocalSymbols
 export function defaultRender(template: string, data: Record<string, any>){
+  try {
+    const resolved = require.resolve('ejs')
+    return require(resolved).render(template, data, {delimiter: '%', root: process.cwd()})
+  } catch (e){
+    // @ts-ignore
+    if (e.code === 'MODULE_NOT_FOUND') {
+      throw new Error(`Module 'ejs' is not found! Did you install it?`);
+    }
+  }
   return template
 }
 

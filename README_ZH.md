@@ -19,6 +19,7 @@
   + `load`: 对`html文件`的处理,包括模板文件的渲染
 
 ## 更新信息
+1. `0.3.0` 对于默认的`render`,现在会检查项目中是否安装了`ejs`,如果有,则将会调用`ejs`的render进行处理,否则直接返回`html`代码
 1. `0.2.9` 添加了一个新的配置 `injectCode` ,用于直接在`html`文件中的一些标签前后插入一些代码
 2. `0.2.8` 添加了一个新的配置`extraGlobPattern` 用于替换默认的`fast-glob`匹配项,其默认值为:  `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`,需要注意的是,如果你的配置有问题,会导致编译生产环境代码时报错: `new Error('[vite]: Rollup failed to resolve import "${id}" from "${importer}".\n'`
 3. `0.2.6` `pages`选项现在可以使用多级的目录
