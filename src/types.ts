@@ -71,6 +71,7 @@ export type InjectCode = {
 
 export const DEFAULT_INJECTCODE_ALL = '*'
 
+let alreadyShowEjsError = false
 // noinspection JSUnusedLocalSymbols
 export function defaultRender(template: string, data: Record<string, any>){
   try {
@@ -79,7 +80,10 @@ export function defaultRender(template: string, data: Record<string, any>){
   } catch (e){
     // @ts-ignore
     if (e.code === 'MODULE_NOT_FOUND') {
-      console.error(`Module 'ejs' is not found! Did you install it?`);
+      if (!alreadyShowEjsError) {
+        console.error(`Module 'ejs' is not found! Did you install it?`);
+        alreadyShowEjsError = true
+      }
     }
   }
   return template
