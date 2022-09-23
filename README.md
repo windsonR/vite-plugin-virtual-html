@@ -119,6 +119,9 @@ it equals to access `http://localhost:3000/login.html`.
 from `0.1.0` , you can use `render` function to render html template.
 i have just test in `ejs`, but i think other template system will(maybe) work correctly.
 
+**notice:**
+1. `0.3.0` or later,if your html code/template use `ejs` template, you **MUST** install `ejs`
+
 ### extraGlobPattern
 
 Customize `fast-glob`'s pattern
