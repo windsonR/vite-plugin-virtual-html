@@ -1,5 +1,19 @@
 import glob from 'fast-glob'
-import {InjectCode, Pages, POS,} from './types'
+import { InjectCode, Pages, POS, VirtualPage, VirtualPageOptions, } from './types'
+
+export const VIRTUAL_HTML_CONTENT = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>#TITLE#</title>
+    <script src="#ENTRY#" type="module"></script>
+</head>
+<body>
+#BODY#
+</body>
+</html>
+`
 
 const DEFAULT_GLOB_PATTERN = [
     '**/*.html',
@@ -37,4 +51,17 @@ export function generateInjectCode({pos, find, replacement}: InjectCode, code: s
         return code.replace(find, `\n${replacement}\n${find}`)
     }
     return code
+}
+
+/**
+ * generate page from virtual page
+ * @param vPages
+ */
+export async function generateVirtualPage(vPages: VirtualPageOptions): Promise<string> {
+    const {
+        entry,
+      title = '',
+      body= '<div id="app"></div>'
+    } = vPages
+    return VIRTUAL_HTML_CONTENT.replace('#ENTRY#', entry).replace('#TITLE#', title).replace('#BODY#',body)
 }

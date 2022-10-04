@@ -1,5 +1,4 @@
 import { normalizePath } from 'vite'
-import ejs from 'ejs'
 
 export type PageObject = {
   template: string,
@@ -18,6 +17,17 @@ export type VirtualHtmlTemplateRender = (template: string, data: Record<string, 
 export type VirtualHtmlTemplateData = Record<string, any>
 
 export type Pages = { [key: string]: VirtualHtmlPage }
+
+export type VirtualPageOptions = {
+  entry: string,
+  title?: string,
+  body?: string,
+}
+
+/**
+ * fully virtual html page
+ */
+export type VirtualPage = { [key: string]: VirtualPageOptions }
 /**
  * plugin config options
  */
@@ -26,7 +36,7 @@ export type PluginOptions = {
    * config html-entries' path
    * if it is true, plugin will use glob to find all the html page in project to generate a json like {a: /src/a/a.html,}
    */
-  pages?: Pages | true,
+  pages?: Pages | VirtualPage | true,
   /**
    * define the index page,to replace default index.html
    * this page will trigger `transformIndexHtml` hook.

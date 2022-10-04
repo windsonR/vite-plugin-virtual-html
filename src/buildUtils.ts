@@ -1,11 +1,11 @@
-import {cwd, VirtualHtmlPage} from './types'
+import { cwd, VirtualHtmlPage, VirtualPageOptions } from './types'
 import { normalizePath } from 'vite'
 
 /**
  * use pages' key as html name
  * @param pages
  */
-export function extractHtmlPath(pages: { [p: string]: VirtualHtmlPage }) {
+export function extractHtmlPath(pages: { [p: string]: VirtualHtmlPage| VirtualPageOptions }) {
   const newPages: { [key: string]: string } = {}
   Object.keys(pages).forEach(key => {
     newPages[key]=`/${key}.html`
@@ -16,6 +16,7 @@ export function extractHtmlPath(pages: { [p: string]: VirtualHtmlPage }) {
 /**
  * get html file's name
  * @param id
+ * @param root
  */
 export function getHtmlName(id:string, root?:string){
   const _root = (root ?? '').replace(cwd, '');

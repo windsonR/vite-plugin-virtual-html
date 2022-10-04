@@ -4,7 +4,7 @@ import Vue from '@vitejs/plugin-vue'
 import Inspect from 'vite-plugin-inspect'
 // @ts-ignore
 import ejs from 'ejs'
-import {POS} from "./src/types";
+import {POS} from './src/types';
 
 export default defineConfig({
   resolve:{
@@ -44,7 +44,16 @@ export default defineConfig({
       //     }
       //   }
       // },
-      pages: true,
+      // pages: true,
+      pages: {
+        demo1: {
+          // template data
+          entry: '/demo/demo1/demo1.ts',
+        },
+        demo2: {
+          entry: '/demo/demo1/demo1.ts',
+        }
+      },
       data:{
         users: ['a','b','c'],
         script: '<script type="module" src="/demo/demo1/demo1.ts"></script>'
