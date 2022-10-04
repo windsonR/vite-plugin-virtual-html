@@ -16,6 +16,7 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 
 ## update
+1. `0.4.0` add a new option to `pages`,just need an js file,plugin will auto generate a html file which include the entry js 
 1. `0.3.0` change the behavior of `defaultRender`, if in project, it has `ejs` as dependency, it will return html code which rendered by `ejs`, otherwise it will return html code directly as old version do
 1. `0.2.9` add a new option `injectCode` to add some code before/after tag in html file
 2. `0.2.8` add a new option `extraGlobPattern` to customize `fast-glob`'s pattern. Default pattern is `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`, attention: if your config has problems, such as you didn't ignore `dist`, when build,it will occur error: `new Error('[vite]: Rollup failed to resolve import "${id}" from "${importer}".\n'`
@@ -89,6 +90,12 @@ it will be used for:
       // render(template, data){
       //   return template
       // }
+    },
+    // 4. config a js file path to auto-generate a html file
+    login4: {
+      entry: '/src/login/login.js', // MUST
+      title: 'login4',// optional, default: ''
+      body: '<div id="app"></div>' // optional, default: '<div id="app"></div>'
     }
 }
 ```
@@ -99,6 +106,7 @@ it will be used for:
 3. The `pages` options' `key` and `value`/ `template` file's name can different.
 4. for example 1, you can access `login1.html` when `dev` mode, and it will generate a `login1.html` when build. 
 5. when `pages` set to `true`, the `template.html` will only generate **ONLY ONE** `html` file
+6. when use `entry` config, plugin will auto generate a html file like this project's `demo4.html`, according your `entry`/`title`/`body` config, it will has a little difference
 
 ### indexPage
 

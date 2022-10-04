@@ -19,6 +19,7 @@
   + `load`: 对`html文件`的处理,包括模板文件的渲染
 
 ## 更新信息
+1. `0.4.0`现在支持不添加指定任何`html`文件,即可实现`html`页面的生成
 1. `0.3.0` 对于默认的`render`,现在会检查项目中是否安装了`ejs`,如果有,则将会调用`ejs`的render进行处理,否则直接返回`html`代码
 1. `0.2.9` 添加了一个新的配置 `injectCode` ,用于直接在`html`文件中的一些标签前后插入一些代码
 2. `0.2.8` 添加了一个新的配置`extraGlobPattern` 用于替换默认的`fast-glob`匹配项,其默认值为:  `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`,需要注意的是,如果你的配置有问题,会导致编译生产环境代码时报错: `new Error('[vite]: Rollup failed to resolve import "${id}" from "${importer}".\n'`
@@ -97,6 +98,12 @@ json对象的每个值,可以是字符串(指向某个html/template文件),也�
       // render(template, data){
       //   return template
       // }
+    },
+    // 4. 通过传入入口文件路径即可自动生成一个html文件.
+    login4: {
+      entry: '/src/login/login.js', // 必需
+      title: 'login4',// 可选, 默认值: ''
+      body: '<div id="app"></div>' //可选, 默认值: '<div id="app"></div>'
     }
 }
 ```
@@ -106,6 +113,7 @@ json对象的每个值,可以是字符串(指向某个html/template文件),也�
 3. `pages`配置的`key`和配置的`value`/ `template`html文件的名字可以不一样
 4. 示例1中，`dev`时可访问`login1.html`，`build`后，会生成`login1.html`而不是`index.html`,同理，其他示例也会产生以key为名字的html文件
 5. 当 `pages` 设置为 `true`, `template.html` 最终只会生成**一个**`html`文件
+6. 当使用`entry`传入入口文件时,最终生成的代码会与这个项目根目录的`demo4.html`类似,根据你传入的`entry`/`title`/`body`而有所不同
 
 ### indexPage
 
