@@ -72,7 +72,7 @@ export async function readTemplate(templatePath: string): Promise<string> {
  * @param globalData
  * @param globalRender
  */
-export async function generatePageOptions(page: VirtualHtmlPage, globalData: Record<string, unknown>, globalRender: VirtualHtmlTemplateRender): Promise<PageObject> {
+export async function generatePageOptions(page: PageObject| string, globalData: Record<string, unknown>, globalRender: VirtualHtmlTemplateRender): Promise<PageObject> {
   if (typeof page === 'string') {
     return {
       template: page,

@@ -9,7 +9,6 @@ import {
   Pages,
   PluginOptions,
   VirtualHtmlPage,
-  VirtualPage,
   VirtualPageOptions,
 } from './types'
 import { generatePageOptions, generateUrl, readHtml } from './devUtils'
@@ -27,7 +26,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
     extraGlobPattern = [],
     injectCode = {}
   } = virtualHtmlOptions
-  let pages: Pages | VirtualPage
+  let pages: Pages
   if (pagesObj === true || pagesObj === undefined) {
     pages = findAllHtmlInProject(extraGlobPattern)
   } else {

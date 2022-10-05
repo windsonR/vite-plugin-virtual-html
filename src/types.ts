@@ -8,7 +8,7 @@ export type PageObject = {
 /**
  * describe a page
  */
-export type VirtualHtmlPage = string | PageObject
+export type VirtualHtmlPage = string | PageObject | VirtualPageOptions
 /**
  * html template render
  */
@@ -25,10 +25,6 @@ export type VirtualPageOptions = {
 }
 
 /**
- * fully virtual html page
- */
-export type VirtualPage = { [key: string]: VirtualPageOptions }
-/**
  * plugin config options
  */
 export type PluginOptions = {
@@ -36,7 +32,7 @@ export type PluginOptions = {
    * config html-entries' path
    * if it is true, plugin will use glob to find all the html page in project to generate a json like {a: /src/a/a.html,}
    */
-  pages?: Pages | VirtualPage | true,
+  pages?: Pages | true,
   /**
    * define the index page,to replace default index.html
    * this page will trigger `transformIndexHtml` hook.

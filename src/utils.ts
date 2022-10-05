@@ -1,5 +1,5 @@
 import glob from 'fast-glob'
-import { InjectCode, Pages, POS, VirtualPage, VirtualPageOptions, } from './types'
+import { InjectCode, Pages, POS, VirtualPageOptions, } from './types'
 
 export const VIRTUAL_HTML_CONTENT = `
 <!DOCTYPE html>
