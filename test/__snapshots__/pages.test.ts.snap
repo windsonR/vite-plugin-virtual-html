@@ -1,0 +1,106 @@
+// Vitest Snapshot v1
+
+exports[`html_with_entry_and_template_config 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+    <meta charset=\\"UTF-8\\">
+    <title></title>
+    <script src=\\"/test/demo/demo1/demo1.ts\\" type=\\"module\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`html_with_entry_and_template_config 2`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`html_with_entry_config 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+    <meta charset=\\"UTF-8\\">
+    <title></title>
+    <script src=\\"/test/demo/demo1/demo1.ts\\" type=\\"module\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`html_with_template_config1 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`html_with_template_config2 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`index 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`index 2`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
