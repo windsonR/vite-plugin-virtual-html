@@ -87,7 +87,7 @@ export function defaultRender(template: string, data: Record<string, any>){
     // @ts-ignore
     if (e.code === 'MODULE_NOT_FOUND') {
       if (!alreadyShowEjsError) {
-        console.error(`Module 'ejs' is not found! Did you install it?`);
+        console.error(`Module 'ejs' is not found! If you want to use it, please install it. Otherwise please ignore this error!`);
         alreadyShowEjsError = true
       }
     }
