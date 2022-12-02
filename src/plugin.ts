@@ -15,7 +15,7 @@ import { generatePageOptions, generateUrl, readHtml } from './devUtils'
 import { addTrailingSlash, extractHtmlPath, getHtmlName } from './buildUtils'
 import path from 'path'
 import fs, { promises as fsp } from 'fs'
-import { findAllHtmlInProject, generateInjectCode, generateVirtualPage } from './utils'
+import {findAllHtmlInProject, generateInjectCode, generateVirtualPage, logger} from './utils'
 
 export default (virtualHtmlOptions: PluginOptions): Plugin => {
   const {
@@ -96,7 +96,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
             }
           }
         }
-        console.warn('NOTICE: This plugin cannot use in library mode!')
+          logger('[vite-plugin-virtual-html]: This plugin cannot use in library mode!')
         // get custom distDir config,if it is undefined use default config 'dist'
         distDir = config.build?.outDir ?? 'dist'
         // inject build.rollupOptions.input from pages directly.

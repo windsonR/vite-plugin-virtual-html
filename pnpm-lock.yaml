@@ -6,6 +6,7 @@ specifiers:
   '@types/node': ^14.0.14
   '@vitejs/plugin-vue': ^1.2.0
   '@vue/compiler-sfc': ^3.0.9
+  debug: ^4.3.4
   ejs: ^3.1.6
   fast-glob: ^3.2.11
   playwright-chromium: ^1.26.1
@@ -25,6 +26,7 @@ devDependencies:
   '@types/node': 14.18.21
   '@vitejs/plugin-vue': 1.10.2_vite@2.9.10
   '@vue/compiler-sfc': 3.2.37
+  debug: 4.3.4
   ejs: 3.1.8
   playwright-chromium: 1.27.1
   typescript: 4.7.3
@@ -792,7 +794,7 @@ packages:
   /filelist/1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
     dependencies:
-      minimatch: 5.1.0
+      minimatch: 5.1.1
     dev: true
 
   /fill-range/7.0.1:
@@ -911,8 +913,8 @@ packages:
       brace-expansion: 1.1.11
     dev: true
 
-  /minimatch/5.1.0:
-    resolution: {integrity: sha512-9TPBGGak4nHfGZsPBohm9AWg6NoT7QTCehS3BIJABslyZbzxfV78QM2Y6+i741OPZIafFAaiiEMh5OyIrJPgtg==}
+  /minimatch/5.1.1:
+    resolution: {integrity: sha512-362NP+zlprccbEt/SkxKfRMHnNY85V74mVnpUpNyr3F35covl09Kec7/sEFLt3RA4oXmewtoaanoIf67SE5Y5g==}
     engines: {node: '>=10'}
     dependencies:
       brace-expansion: 2.0.1

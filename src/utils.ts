@@ -1,5 +1,6 @@
 import glob from 'fast-glob'
 import { InjectCode, Pages, POS, VirtualPageOptions, } from './types'
+import debug from 'debug';
 
 export const VIRTUAL_HTML_CONTENT = `
 <!DOCTYPE html>
@@ -20,6 +21,8 @@ const DEFAULT_GLOB_PATTERN = [
     '!node_modules/**/*.html',
     '!.**/*.html'
 ]
+
+export const logger = debug('vite-plugin-virtual-html')
 
 /**
  * find all html file in project and return it as Pages

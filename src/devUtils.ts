@@ -4,12 +4,12 @@ import {
   cwd,
   defaultRender,
   PageObject,
-  VirtualHtmlPage,
   VirtualHtmlTemplateData,
   VirtualHtmlTemplateRender,
 } from './types'
 import * as path from 'path'
 import * as fs from 'fs'
+import {logger} from "./utils";
 
 const fsp = fs.promises
 
@@ -37,7 +37,7 @@ export function generateUrl(url?: string): string {
 export async function readHtml({template = '', data = {}, render = defaultRender}: PageObject) {
   const templatePath = path.resolve(cwd, `.${template}`)
   if (!fs.existsSync(templatePath)) {
-    console.error('template must exist!')
+      logger('[vite-plugin-virtual-html]: template file must exist!')
     return ''
   }
   const htmlCode = await renderTemplate(templatePath, render, data)
