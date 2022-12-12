@@ -1,5 +1,5 @@
 import { cwd, VirtualHtmlPage, VirtualPageOptions } from './types'
-import { normalizePath } from 'vite'
+import { normalizePath } from './utils'
 
 /**
  * use pages' key as html name

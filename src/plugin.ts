@@ -1,7 +1,7 @@
 // noinspection UnnecessaryLocalVariableJS,JSUnusedGlobalSymbols
 // noinspection JSUnusedGlobalSymbols
 
-import { normalizePath, Plugin, UserConfig, ViteDevServer } from 'vite'
+import type { Plugin, UserConfig, ViteDevServer } from 'vite'
 import {
   cwd,
   DEFAULT_INJECTCODE_ALL,
@@ -15,7 +15,7 @@ import { generatePageOptions, generateUrl, readHtml } from './devUtils'
 import { addTrailingSlash, extractHtmlPath, getHtmlName } from './buildUtils'
 import path from 'path'
 import fs, { promises as fsp } from 'fs'
-import {findAllHtmlInProject, generateInjectCode, generateVirtualPage, logger} from './utils'
+import { findAllHtmlInProject, generateInjectCode, generateVirtualPage, logger, normalizePath, } from './utils'
 
 export default (virtualHtmlOptions: PluginOptions): Plugin => {
   const {

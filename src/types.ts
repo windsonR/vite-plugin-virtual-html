@@ -1,5 +1,4 @@
-import { normalizePath } from 'vite'
-import {logger} from "./utils";
+import { logger, normalizePath } from './utils'
 
 export type PageObject = {
   template: string,
@@ -79,16 +78,20 @@ export type InjectCode = {
 export const DEFAULT_INJECTCODE_ALL = '*'
 
 let alreadyShowEjsError = false
+
 // noinspection JSUnusedLocalSymbols
-export function defaultRender(template: string, data: Record<string, any>){
+export function defaultRender(template: string, data: Record<string, any>) {
   try {
     const resolved = require.resolve('ejs')
-    return require(resolved).render(template, data, {delimiter: '%', root: process.cwd()})
-  } catch (e){
+    return require(resolved).render(template, data, {
+      delimiter: '%',
+      root: process.cwd()
+    })
+  } catch (e) {
     // @ts-ignore
     if (e.code === 'MODULE_NOT_FOUND') {
       if (!alreadyShowEjsError) {
-          logger(`[vite-plugin-virtual-html]: Module 'ejs' is not found! If you want to use it, please install it. Otherwise please ignore this error!`)
+        logger(`[vite-plugin-virtual-html]: Module 'ejs' is not found! If you want to use it, please install it. Otherwise please ignore this error!`)
         alreadyShowEjsError = true
       }
     }

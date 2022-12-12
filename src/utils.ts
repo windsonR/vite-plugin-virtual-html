@@ -1,6 +1,8 @@
 import glob from 'fast-glob'
 import { InjectCode, Pages, POS, VirtualPageOptions, } from './types'
-import debug from 'debug';
+import debug from 'debug'
+import path from 'node:path'
+import os from 'node:os'
 
 export const VIRTUAL_HTML_CONTENT = `
 <!DOCTYPE html>
@@ -68,3 +70,14 @@ export async function generateVirtualPage(vPages: VirtualPageOptions): Promise<s
     } = vPages
     return VIRTUAL_HTML_CONTENT.replace('#ENTRY#', entry).replace('#TITLE#', title).replace('#BODY#',body)
 }
+
+// sourcecode from vite
+export const isWindows = os.platform() === 'win32'
+
+export function slash(p: string): string {
+    return p.replace(/\\/g, '/')
+}
+export function normalizePath(id: string): string {
+    return path.posix.normalize(isWindows ? slash(id) : id)
+}
+// end
