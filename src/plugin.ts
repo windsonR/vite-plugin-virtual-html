@@ -15,7 +15,7 @@ import { generatePageOptions, generateUrl, readHtml } from './devUtils'
 import { addTrailingSlash, extractHtmlPath, getHtmlName } from './buildUtils'
 import path from 'path'
 import fs, { promises as fsp } from 'fs'
-import { findAllHtmlInProject, generateInjectCode, generateVirtualPage, logger, normalizePath, } from './utils'
+import { findAllHtmlInProject, generateInjectCode, generateVirtualPage, logger, normalizePath, } from './types'
 
 export default (virtualHtmlOptions: PluginOptions): Plugin => {
   const {
