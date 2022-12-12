@@ -1,8 +1,12 @@
 {
   "name": "vite-plugin-virtual-html",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Vite plugin for load html which is not under project root",
   "exports": {
+    ".": {
+      "require": "./dist/plugin.js",
+      "import": "./dist/plugin.mjs"
+    },
     "./buildUtils": {
       "require": "./dist/buildUtils.js",
       "import": "./dist/buildUtils.mjs"
