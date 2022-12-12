@@ -2,7 +2,7 @@ import type { Options } from 'tsup'
 
 export const tsup: Options = {
   entry: [
-    'src/plugin.ts',
+    'src/*.ts',
   ],
   format: ['cjs', 'esm'],
   dts: true,
