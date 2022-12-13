@@ -1,30 +1,14 @@
 {
   "name": "vite-plugin-virtual-html",
-  "version": "0.4.6",
-  "description": "Vite plugin for load html which is not under project root",
-  "main": "./dist/plugin.js",
-  "module": "./dist/plugin.mjs",
-  "types": "./dist/plugin.d.ts",
+  "version": "0.4.7",
+  "description": "Vite plugin to load html anywhere",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/plugin.js",
-      "import": "./dist/plugin.mjs"
-    },
-    "./buildUtils": {
-      "require": "./dist/buildUtils.js",
-      "import": "./dist/buildUtils.mjs"
-    },
-    "./devUtils": {
-      "require": "./dist/devUtils.js",
-      "import": "./dist/devUtils.mjs"
-    },
-    "./plugin": {
-      "require": "./dist/plugin.js",
-      "import": "./dist/plugin.mjs"
-    },
-    "./types": {
-      "require": "./dist/types.js",
-      "import": "./dist/types.mjs"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     }
   },
   "scripts": {
@@ -49,7 +33,7 @@
   "bugs": {
     "url": "https://github.com/Windson1806/vite-plugin-virtual-html/issues"
   },
-  "homepage": "",
+  "homepage": "https://github.com/Windson1806/vite-plugin-virtual-html/",
   "devDependencies": {
     "@types/debug": "^4.1.7",
     "@types/ejs": "^3.1.0",

@@ -1,12 +1,14 @@
-import type { Options } from 'tsup'
+import { defineConfig } from 'tsup'
 
-export const tsup: Options = {
+export const tsup =  defineConfig({
   entry: [
-    'src/*.ts',
+    'src/index.ts',
   ],
   format: ['cjs', 'esm'],
   dts: true,
-  splitting: true,
+  splitting: false,
   clean: true,
   shims: false,
-}
+  minify: false,
+  sourcemap: true,
+})
