@@ -74,7 +74,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
           return generateInjectCode(injectCode[DEFAULT_INJECTCODE_ALL], code)
         }
       }
-      return code
+      return null
     },
     // @ts-ignore
     async config(config, {command}) {
