@@ -27,7 +27,7 @@ jobs:
       - run: pnpm i
       - run: npx playwright install
       - run: pnpm test
-      - run: tsup
+      - run: pnpm tsup
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
