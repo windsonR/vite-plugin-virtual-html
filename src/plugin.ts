@@ -63,7 +63,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         })
       }
     },
-    async transform(code: string, id: string): Promise<string> {
+    async transform(code: string, id: string): Promise<string> | null {
       if (id.indexOf('.html') >= 0) {
         const ids = id.split('/')
         const key = ids[ids.length - 1]
@@ -74,7 +74,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
           return generateInjectCode(injectCode[DEFAULT_INJECTCODE_ALL], code)
         }
       }
-      return code
+      return null
     },
     // @ts-ignore
     async config(config, {command}) {
