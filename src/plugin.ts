@@ -63,7 +63,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         })
       }
     },
-    async transform(code: string, id: string): Promise<string> | null {
+    async transform(code: string, id: string): Promise<string|null> {
       if (id.indexOf('.html') >= 0) {
         const ids = id.split('/')
         const key = ids[ids.length - 1]
