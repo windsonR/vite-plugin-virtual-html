@@ -24,6 +24,7 @@ jobs:
         with:
           node-version: 16.19.0
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
       - run: pnpm i
       - run: npx playwright install
       - run: pnpm test
