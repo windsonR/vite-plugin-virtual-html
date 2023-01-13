@@ -30,4 +30,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
     - run: pnpm i
+    - run: pnpm dlx playwright install
     - run: pnpm test
