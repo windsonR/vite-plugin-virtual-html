@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - run: npm install pnpm -g
-      - run: ls
+      - run: cd vite-plugin-virtual-html
       - run: pnpm install
       - run: pnpm run test
         env:
