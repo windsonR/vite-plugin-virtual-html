@@ -26,8 +26,6 @@ jobs:
           cache: 'pnpm'
       - run: pnpm i
       - run: npx playwright install
-      - run: git config --global user.email "a@outlook.com"
-      - run: git config --global user.name "b"
       - run: pnpm test
       - run: pnpm build
         env:
