@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - run: npm install pnpm -g
+      - run: cd /home/runner/work/vite-plugin-virtual-html/vite-plugin-virtual-html
+      - run: ls
       - run: pnpm install
       - run: pnpm run test
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
