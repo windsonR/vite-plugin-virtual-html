@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - run: npm install pnpm -g
-      - run: 
+      - run: ls
       - run: pnpm install
       - run: pnpm run test
         env:
