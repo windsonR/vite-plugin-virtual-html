@@ -8,28 +8,8 @@ on:
     types: [created]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-        
-    steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
-        with:
-          version: 7.16.0
-      - name: Use Node.js 16.19.0
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.19.0
-          cache: 'pnpm'
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.19.0
-          cache: 'pnpm'
-      - run: pnpm i
-      - run: pnpm test
-        
-  publish-gpr:
-    needs: build
+      
+  publish-npm:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -45,6 +25,8 @@ jobs:
           node-version: 16.19.0
           cache: 'pnpm'
       - run: pnpm i
+      - run: npx playwright install
+      - run: pnpm test
       - run: pnpm build
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
