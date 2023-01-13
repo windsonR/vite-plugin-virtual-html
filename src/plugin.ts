@@ -58,7 +58,12 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
             htmlCode = await plugin.load(url) ?? ''
           }
           // @ts-ignore
-          res.end(await server.transformIndexHtml(url, await plugin.transform(htmlCode, url)))
+          const transformResult = await plugin.transform(htmlCode, url)
+          console.log(url, htmlCode, transformResult)
+          if (transformResult === null) {
+            return next()
+          }
+          res.end(await server.transformIndexHtml(url, transformResult))
           next()
         })
       }
@@ -73,6 +78,7 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         if (DEFAULT_INJECTCODE_ALL in injectCode) {
           return generateInjectCode(injectCode[DEFAULT_INJECTCODE_ALL], code)
         }
+        return code
       }
       return null
     },
