@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "npm version patch && tsup && npm publish && git clean -f",
+    "build": "npm version patch && git push && tsup && npm publish && git clean -f",
     "test:build": "vite build",
     "test:dev": "vite",
     "test": "vitest"
