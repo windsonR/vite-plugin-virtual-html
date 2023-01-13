@@ -1,7 +1,7 @@
 // noinspection UnnecessaryLocalVariableJS,JSUnusedGlobalSymbols
 // noinspection JSUnusedGlobalSymbols
 
-import { normalizePath, Plugin, UserConfig, ViteDevServer } from 'vite'
+import type { Plugin, UserConfig, ViteDevServer } from 'vite'
 import {
   cwd,
   DEFAULT_INJECTCODE_ALL,
@@ -15,7 +15,7 @@ import { generatePageOptions, generateUrl, readHtml } from './devUtils'
 import { addTrailingSlash, extractHtmlPath, getHtmlName } from './buildUtils'
 import path from 'path'
 import fs, { promises as fsp } from 'fs'
-import {findAllHtmlInProject, generateInjectCode, generateVirtualPage, logger} from './utils'
+import { findAllHtmlInProject, generateInjectCode, generateVirtualPage, logger, normalizePath, } from './types'
 
 export default (virtualHtmlOptions: PluginOptions): Plugin => {
   const {
@@ -58,12 +58,17 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
             htmlCode = await plugin.load(url) ?? ''
           }
           // @ts-ignore
-          res.end(await server.transformIndexHtml(url, await plugin.transform(htmlCode, url)))
+          const transformResult = await plugin.transform(htmlCode, url)
+          console.log(url, htmlCode, transformResult)
+          if (transformResult === null) {
+            return next()
+          }
+          res.end(await server.transformIndexHtml(url, transformResult))
           next()
         })
       }
     },
-    async transform(code: string, id: string): Promise<string> {
+    async transform(code: string, id: string): Promise<string|null> {
       if (id.indexOf('.html') >= 0) {
         const ids = id.split('/')
         const key = ids[ids.length - 1]
@@ -73,8 +78,9 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
         if (DEFAULT_INJECTCODE_ALL in injectCode) {
           return generateInjectCode(injectCode[DEFAULT_INJECTCODE_ALL], code)
         }
+        return code
       }
-      return code
+      return null
     },
     // @ts-ignore
     async config(config, {command}) {

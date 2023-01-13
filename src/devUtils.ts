@@ -9,7 +9,7 @@ import {
 } from './types'
 import * as path from 'path'
 import * as fs from 'fs'
-import {logger} from "./utils";
+import {logger} from "./types";
 
 const fsp = fs.promises
 

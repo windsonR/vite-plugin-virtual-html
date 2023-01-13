@@ -1,19 +1,24 @@
 {
   "name": "vite-plugin-virtual-html",
-  "version": "0.4.1",
-  "description": "Vite plugin for load html which is not under project root",
-  "main": "src/plugin.js",
+  "version": "0.4.8",
+  "description": "Vite plugin to load html anywhere",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "scripts": {
-    "build": "tsc -p . --skipLibCheck && npm publish && git clean -f",
+    "build": "tsup && npm publish && git clean -f",
     "test:build": "vite build",
     "test:dev": "vite",
     "test": "vitest"
   },
   "files": [
-    "src/*.js",
-    "src/*.js.map",
-    "src/*.d.ts",
-    "src/*.ts"
+    "dist"
   ],
   "keywords": [
     "vite-plugin",
@@ -28,7 +33,7 @@
   "bugs": {
     "url": "https://github.com/Windson1806/vite-plugin-virtual-html/issues"
   },
-  "homepage": "",
+  "homepage": "https://github.com/Windson1806/vite-plugin-virtual-html/",
   "devDependencies": {
     "@types/debug": "^4.1.7",
     "@types/ejs": "^3.1.0",
@@ -36,9 +41,9 @@
     "@types/node": "^14.0.14",
     "@vitejs/plugin-vue": "^1.2.0",
     "@vue/compiler-sfc": "^3.0.9",
-    "debug": "^4.3.4",
     "ejs": "^3.1.6",
     "playwright-chromium": "^1.26.1",
+    "tsup": "^6.5.0",
     "typescript": "^4.1.2",
     "vite": "^2.0.0",
     "vite-plugin-inspect": "^0.3.13",
@@ -47,6 +52,7 @@
     "vue-router": "^4.0.0"
   },
   "dependencies": {
+    "debug": "^4.3.4",
     "fast-glob": "^3.2.11"
   }
 }
