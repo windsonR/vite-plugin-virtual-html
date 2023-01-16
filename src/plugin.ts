@@ -59,7 +59,6 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
           }
           // @ts-ignore
           const transformResult = await plugin.transform(htmlCode, url)
-          console.log(url, htmlCode, transformResult)
           if (transformResult === null) {
             return next()
           }
