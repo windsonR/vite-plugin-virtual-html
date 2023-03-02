@@ -16,6 +16,7 @@ this plugin use vite's `configureServer` Hook to intercept html request and resp
 
 
 ## update
+1. `1.0.2` add `connect-history-api-fallback` support
 1. `0.4.0` add a new option to `pages`,just need an js file,plugin will auto generate a html file which include the entry js 
 1. `0.3.0` change the behavior of `defaultRender`, if in project, it has `ejs` as dependency, it will return html code which rendered by `ejs`, otherwise it will return html code directly as old version do
 1. `0.2.9` add a new option `injectCode` to add some code before/after tag in html file

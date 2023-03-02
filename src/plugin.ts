@@ -5,7 +5,7 @@ import type { Plugin, UserConfig, ViteDevServer } from 'vite'
 import {
   cwd,
   DEFAULT_INJECTCODE_ALL,
-  defaultRender,
+  defaultRender, HistoryRewrites,
   Pages,
   PluginOptions,
   VirtualHtmlPage,
@@ -16,6 +16,8 @@ import { addTrailingSlash, extractHtmlPath, getHtmlName } from './buildUtils'
 import path from 'path'
 import fs, { promises as fsp } from 'fs'
 import { findAllHtmlInProject, generateInjectCode, generateVirtualPage, logger, normalizePath, } from './types'
+import history from 'connect-history-api-fallback'
+import type { Connect } from 'vite'
 
 export default (virtualHtmlOptions: PluginOptions): Plugin => {
   const {
@@ -24,7 +26,8 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
     render: globalRender = defaultRender,
     data: globalData = {},
     extraGlobPattern = [],
-    injectCode = {}
+    injectCode = {},
+    rewrites,
   } = virtualHtmlOptions
   let pages: Pages
   if (pagesObj === true || pagesObj === undefined) {
@@ -38,6 +41,9 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
   const plugin = {
     name: 'vite-plugin-virtual-html',
     configureServer(server: ViteDevServer) {
+      if (rewrites) {
+        buildHistoryApiFallback(server,rewrites)
+      }
       // other html handled after vite's inner middlewares.
       return () => {
         server.middlewares.use('/', async (req, res, next) => {
@@ -156,6 +162,34 @@ export default (virtualHtmlOptions: PluginOptions): Plugin => {
     },
   }
   return plugin
+}
+
+export const historyApiFallbackPlugin = (virtualHtmlOptions: PluginOptions):Plugin=>{
+  const {rewrites} = virtualHtmlOptions
+  return {
+    name: 'vite-plugin-virtual-html:history',
+    configureServer(server: ViteDevServer) {
+      if (rewrites) {
+        buildHistoryApiFallback(server,rewrites)
+      }
+    },
+  }
+}
+
+/**
+ * build a server
+ * @param server
+ * @param rewrites
+ */
+export function buildHistoryApiFallback(server:ViteDevServer, rewrites:Array<HistoryRewrites>){
+  server.middlewares.use(history({
+    disableDotRule: undefined,
+    htmlAcceptHeaders: [
+      'text/html',
+      'application/xhtml+xml'
+    ],
+    rewrites: rewrites,
+  }) as Connect.NextHandleFunction)
 }
 
 /**

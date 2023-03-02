@@ -27,6 +27,11 @@ export type VirtualPageOptions = {
   body?: string,
 }
 
+export type HistoryRewrites = {
+  from: RegExp,
+  to: string,
+}
+
 /**
  * plugin config options
  */
@@ -59,6 +64,10 @@ export type PluginOptions = {
    * key: html name, can be *
    */
   injectCode?: Record<string, InjectCode>
+  /**
+   * option to connect-history-api-fallback's rewrites
+   */
+  rewrites?: Array<HistoryRewrites>
 }
 
 /**
