@@ -1,13 +1,13 @@
 import {defineConfig} from 'vite'
-import VirtualHtml from './src/plugin'
+import VirtualHtml from './src'
 import Vue from '@vitejs/plugin-vue'
 import Inspect from 'vite-plugin-inspect'
 // @ts-ignore
 import ejs from 'ejs'
-import {POS} from './src/types';
+import {POS} from './src/html/types';
 
 export default defineConfig({
-  resolve:{
+  resolve: {
     alias: {
       'vue': 'vue/dist/vue.esm-bundler.js'
     }
@@ -54,8 +54,8 @@ export default defineConfig({
           entry: '/demo/demo1/demo1.ts',
         }
       },
-      data:{
-        users: ['a','b','c'],
+      data: {
+        users: ['a', 'b', 'c'],
         script: '<script type="module" src="/demo/demo1/demo1.ts"></script>'
       },
       indexPage: 'demo1',
@@ -63,24 +63,30 @@ export default defineConfig({
       // render(template,data){
       //   return ejs.render(template, data, {delimiter: '%', root: process.cwd()})
       // },
-      extraGlobPattern:  [
+      extraGlobPattern: [
         '**/*.html',
         '!node_modules/**/*.html',
         '!.**/*.html',
         '!dist/**/*.html'
       ],
       injectCode: {
-        'demo1.html':{
+        'demo1.html': {
           pos: POS.after,
           find: '<head>',
           replacement: '<script>window.dd = "dd";</script>'
         },
-        '*':{
+        '*': {
           pos: POS.after,
           find: '<head>',
           replacement: '<script>window.dd = "bbb";</script>'
         },
-      }
+      },
+      // rewrites: [
+      //   {
+      //     from: /.*/g,
+      //     to: ''
+      //   }
+      // ]
     }),
   ],
 })

@@ -1,8 +1,8 @@
 // noinspection DuplicatedCode
 
-import { expect, test } from 'vitest'
-import VirtualHtml from '../src/plugin'
-import { createServer, } from 'vite'
+import {expect, test} from 'vitest'
+import VirtualHtml from '../src'
+import {createServer,} from 'vite'
 import {page} from '../vitestSetup'
 
 test('template_ejs', async () => {

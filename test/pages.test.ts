@@ -1,9 +1,9 @@
 // noinspection DuplicatedCode
 
-import { expect, test } from 'vitest'
-import VirtualHtml from '../src/plugin'
-import { createServer, } from 'vite'
-import { page } from '../vitestSetup'
+import {expect, test} from 'vitest'
+import VirtualHtml from '../src'
+import {createServer,} from 'vite'
+import {page} from '../vitestSetup'
 
 test('index', async () => {
   const server = await createServer({
@@ -85,7 +85,7 @@ test('html_with_entry_config', async () => {
 })
 
 test('html_with_entry_and_template_config', async () => {
-  
+
   const server = await createServer({
     configFile: false,
     plugins: [
