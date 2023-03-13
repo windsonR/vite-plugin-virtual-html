@@ -8,3 +8,7 @@ export default (virtualHtmlOptions: HtmlPluginOptions & HistoryApiOptions): Plug
 }
 
 export * from './history-api/historyApiFallbackPlugin'
+
+export * from './html/types'
+
+export * from './history-api/types'
