@@ -1,7 +1,5 @@
-import {Serve} from "./Serve"
 import {HtmlPluginOptions} from "./types"
 import type {ConfigEnv, Plugin, UserConfig, ViteDevServer} from 'vite'
-import {Build} from "./Build"
 import {HistoryApiOptions} from "../history-api/types"
 
 export default class VirtualHtmlPlugin implements Plugin {
@@ -27,17 +25,21 @@ export default class VirtualHtmlPlugin implements Plugin {
   async config(config: UserConfig, {command}: ConfigEnv) {
     this._config = config
     if (command === 'serve') {
-      const serve = new Serve(this._htmlOptions)
-      this.configureServer = serve._configureServer.bind(serve)
-      this.load = serve._load.bind(serve)
-      this.transform = serve._transform.bind(serve)
+      await import('./Serve').then(({Serve}) => {
+        const serve = new Serve(this._htmlOptions)
+        this.configureServer = serve._configureServer.bind(serve)
+        this.load = serve._load.bind(serve)
+        this.transform = serve._transform.bind(serve)
+      })
     }
     if (command === 'build') {
-      const build = new Build(this._htmlOptions)
-      await build._buildConfig.call(build, config)
-      this.load = build._load.bind(build)
-      this.transform = build._transform.bind(build)
-      this.closeBundle = build._closeBundle.bind(build)
+      await import('./Build').then(async ({ Build }) => {
+        const build = new Build(this._htmlOptions)
+        await build._buildConfig.call(build, config)
+        this.load = build._load.bind(build)
+        this.transform = build._transform.bind(build)
+        this.closeBundle = build._closeBundle.bind(build)
+      })
     }
   }
 }
