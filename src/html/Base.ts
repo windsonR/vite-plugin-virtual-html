@@ -261,9 +261,16 @@ export class Base {
    */
   findAllHtmlInProject = (extraGlobPattern: Array<string> = []): Pages => {
     const pages: Pages = {}
-    let realPattern = extraGlobPattern
+    let realPattern: Array<string> = []
     if (extraGlobPattern.length === 0) {
       realPattern = DEFAULT_GLOB_PATTERN
+    } else {
+      const set: Set<string> = new Set()
+      DEFAULT_GLOB_PATTERN.forEach(dg=>set.add(dg))
+      extraGlobPattern.forEach(dg=>set.add(dg))
+      for (let key of set.keys()) {
+        realPattern.push(key)
+      }
     }
     const files = glob.sync(realPattern)
     files.forEach(file => {
