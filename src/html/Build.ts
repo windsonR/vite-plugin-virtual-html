@@ -67,11 +67,11 @@ export class Build extends Base {
     }
   }
 
-  async _closeBundle() {
+  _closeBundle() {
     // remove files should not be under project root
     for (let vHtml of this._needRemove) {
       if (fs.existsSync(vHtml)) {
-        await fsp.rm(vHtml, {
+        fsp.rm(vHtml, {
           recursive: true,
         }).catch(() => {
           // ignore this warning
@@ -93,4 +93,3 @@ export class Build extends Base {
   }
 
 }
-
