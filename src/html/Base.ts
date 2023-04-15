@@ -1,6 +1,6 @@
 import type { HtmlPluginOptions, InjectCode, PageObject, VirtualHtmlTemplateData } from './types'
 import { Pages, POS, VirtualHtmlPage, VirtualHtmlTemplateRender, VirtualPageOptions } from './types'
-import type { UserConfig } from 'vite'
+import { type UserConfig, createFilter, } from 'vite'
 import * as path from 'path'
 import * as fs from 'fs'
 import { normalizePath, } from './utils'
@@ -43,6 +43,7 @@ export class Base {
   
   cwd = normalizePath(process.cwd())
   logger = debug('vite-plugin-virtual-html')
+  _filter: (id: string | unknown) => boolean
   
   constructor(virtualHtmlOptions: HtmlPluginOptions) {
     const {
@@ -62,6 +63,7 @@ export class Base {
     this._globalData = data
     this._globalRender = render
     this._injectCode = injectCode
+    this._filter = createFilter(/\.html$/,)
   }
   
   /**
@@ -69,7 +71,7 @@ export class Base {
    * @param id
    */
   _load = async (id: string) => {
-    if (id.endsWith('html')) {
+    if (this._filter(id)) {
       const newId = this.getHtmlName(id, this._config?.root)
       const pageOption: VirtualHtmlPage | VirtualPageOptions = this._pages[newId]
       if (pageOption !== undefined) {
@@ -100,7 +102,7 @@ export class Base {
    * @param id
    */
   _transform = async (code: string, id: string): Promise<string | null> => {
-    if (id.indexOf('.html') >= 0) {
+    if (this._filter(id)) {
       const ids = id.split('/')
       const key = ids[ids.length - 1]
       let _code = code
@@ -123,7 +125,7 @@ export class Base {
   getHtmlName = (id: string, root?: string) => {
     const _root = (root ?? '').replace(this.cwd, '')
     const _id = id.replace(this.cwd, '')
-    const result = _id.substring(0, _id.length - '.html'.length).replace(_root !== '' ? this.addTrailingSlash(_root) : '', '')
+    const result = _id.substring(0, _id.length - /* '.html'.length */5).replace(_root !== '' ? this.addTrailingSlash(_root) : '', '')
     return result.startsWith('/') ? result.substring(1) : result
   }
   
@@ -208,7 +210,6 @@ export class Base {
         render: globalRender,
       }
     }
-    // todo
     const {
       data = {},
       render,
