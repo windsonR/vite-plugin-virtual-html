@@ -50,6 +50,7 @@ export default defineConfig({
           title: 'demo7',
           body: '<div id="app"></div>'
         },
+        'demo1/index': '/demo/demo1/demo1.html',
       },
       data: {
         users: ['a', 'b', 'c'],

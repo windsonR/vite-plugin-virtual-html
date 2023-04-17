@@ -25,18 +25,14 @@ export class Serve extends Base {
         if (!url.endsWith('.html') && url !== '/') {
           return next()
         }
-        // if request / means it request indexPage htmlCode
-        // read indexPage config ,and response indexPage htmlCode
+        // request / means client requests an index page
+        // load it with indexPage config
         let htmlCode: string
-        if (url === '/' || url.indexOf('index.html') >= 0) {
+        if (url === '/' || url === '/index.html') {
           url = `/${this._indexPage}.html`
-          // @ts-ignore
-          htmlCode = await this._load(normalizePath(url)) ?? ''
-        } else {
-          // @ts-ignore
-          htmlCode = await this._load(url) ?? ''
         }
-        // @ts-ignore
+        // load specify html file code
+        htmlCode = await this._load(normalizePath(url))??''
         const transformResult = await this._transform(htmlCode, url)
         if (transformResult === null) {
           return next()
