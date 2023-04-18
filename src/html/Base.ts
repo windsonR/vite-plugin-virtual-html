@@ -63,7 +63,7 @@ export class Base {
     this._globalData = data
     this._globalRender = render
     this._injectCode = injectCode
-    this._filter = createFilter(/\.html$/,)
+    this._filter = createFilter(/\.html|\/$/,)
   }
   
   /**
@@ -72,8 +72,12 @@ export class Base {
    */
   _load = async (id: string) => {
     if (this._filter(id)) {
-      const newId = this.getHtmlName(id, this._config?.root)
-      const pageOption: VirtualHtmlPage | VirtualPageOptions = this._pages[newId]
+      let newId = this.getHtmlName(id, this._config?.root)
+      const maybeIndexName1 = (newId+'/').replace('//', '/')
+      const maybeIndexName2 = (newId + '/index').replace('//', '/')
+      const maybeIndexName3 = newId.replace('index', '').replace('//', '/')
+      
+      const pageOption: VirtualHtmlPage | VirtualPageOptions = this._pages[newId] || this._pages[maybeIndexName1] || this._pages[maybeIndexName2] || this._pages[maybeIndexName3]
       if (pageOption !== undefined) {
         // string
         if (typeof pageOption === 'string') {
@@ -125,8 +129,8 @@ export class Base {
   getHtmlName = (id: string, root?: string) => {
     const _root = (root ?? '').replace(this.cwd, '')
     const _id = id.replace(this.cwd, '')
-    const result = _id.substring(0, _id.length - /* '.html'.length */5).replace(_root !== '' ? this.addTrailingSlash(_root) : '', '')
-    return result.startsWith('/') ? result.substring(1) : result
+    const result = _id.replace('.html','').replace(_root !== '' ? this.addTrailingSlash(_root) : '', '')
+    return result.startsWith('/') ? result.substring(1,result.length) : result
   }
   
   /**

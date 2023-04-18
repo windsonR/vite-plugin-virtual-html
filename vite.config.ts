@@ -26,6 +26,8 @@ export default defineConfig({
             users: ['a','b','c']
           }
         },
+        'demo1/index': '/demo/demoIndex1.html',
+        'demo2/': '/demo/demoIndex2.html',
         demo2: '/demo/demo2/demo2.html',
         demo3: {
           template: '/demo/demo3.html'
@@ -50,7 +52,6 @@ export default defineConfig({
           title: 'demo7',
           body: '<div id="app"></div>'
         },
-        'demo1/index': '/demo/demo1/demo1.html',
       },
       data: {
         users: ['a', 'b', 'c'],

@@ -28,6 +28,52 @@ test('index', async () => {
   await server.close()
 })
 
+test('index_with_sub_folder1', async () => {
+  const server = await createServer({
+    configFile: false,
+    plugins: [
+      VirtualHtml({
+        pages: {
+          // should access with localhost/demo1/ or localhost/demo1/index.html
+          'demo1/index': '/test/demo/demo1/demo1.html',
+        },
+      })
+    ]
+  })
+  await server.listen()
+  await page.goto(`http://localhost:${server.config.server.port}/demo1/`)
+  const index = await page.content()
+  expect(index).toMatchSnapshot()
+  await page.goto(`http://localhost:${server.config.server.port}/demo1/index.html`)
+  const demo1 = await page.content()
+  expect(demo1).toMatchSnapshot()
+  expect(index).toBe(demo1)
+  await server.close()
+})
+
+test('index_with_sub_folder2', async () => {
+  const server = await createServer({
+    configFile: false,
+    plugins: [
+      VirtualHtml({
+        pages: {
+          // should access with localhost/demo1/ or localhost/demo1/index.html
+          'demo1/': '/test/demo/demo1/demo1.html',
+        },
+      })
+    ]
+  })
+  await server.listen()
+  await page.goto(`http://localhost:${server.config.server.port}/demo1/`)
+  const index = await page.content()
+  expect(index).toMatchSnapshot()
+  await page.goto(`http://localhost:${server.config.server.port}/demo1/index.html`)
+  const demo1 = await page.content()
+  expect(demo1).toMatchSnapshot()
+  expect(index).toBe(demo1)
+  await server.close()
+})
+
 test('html_with_template_config1', async () => {
   const server = await createServer({
     configFile: false,

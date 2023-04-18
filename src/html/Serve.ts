@@ -20,9 +20,9 @@ export class Serve extends Base {
     // other html handled after vite's inner middlewares.
     return () => {
       server.middlewares.use('/', async (req, res, next) => {
-        let url = decodeURI(this.generateUrl(req.url))
+        let url = decodeURI(this.generateUrl(req.originalUrl))
         // if request is not html , directly return next()
-        if (!url.endsWith('.html') && url !== '/') {
+        if ((!url.endsWith('.html') && !url.endsWith('/')) && url !== '/') {
           return next()
         }
         // request / means client requests an index page
