@@ -1,7 +1,7 @@
 // noinspection DuplicatedCode
 
 import {expect, test} from 'vitest'
-import VirtualHtml from '../src'
+import VirtualHtml, { POS } from '../src'
 import {createServer,} from 'vite'
 import {page} from '../vitestSetup'
 
@@ -151,6 +151,59 @@ test('html_with_entry_and_template_config', async () => {
   await page.goto(`http://localhost:${server.config.server.port}/demo1.html`)
   expect(await page.content()).toMatchSnapshot()
   await page.goto(`http://localhost:${server.config.server.port}/demo2.html`)
+  expect(await page.content()).toMatchSnapshot()
+  await server.close()
+})
+
+test('html_with_inject_code_demo1', async () => {
+  const server = await createServer({
+    configFile: false,
+    plugins: [
+      VirtualHtml({
+        pages: {
+          demo1: '/test/demo/demo1/demo1.html',
+        },
+        injectCode: {
+          'demo1.html': {
+            pos: POS.before,
+            find: '</head>',
+            replacement: '<script>window.dd = "dd";</script>',
+          }
+        }
+      })
+    ]
+  })
+  await server.listen()
+  await page.goto(`http://localhost:${server.config.server.port}/demo1.html`)
+  expect(await page.content()).toMatchSnapshot()
+  await server.close()
+})
+
+test('html_with_inject_code_all_page', async () => {
+  const server = await createServer({
+    configFile: false,
+    plugins: [
+      VirtualHtml({
+        pages: {
+          demo1: '/test/demo/demo1/demo1.html',
+          demo2: {
+            template: '/test/demo/demo1/demo1.html',
+          }
+        },
+        injectCode: {
+          '*': {
+            pos: POS.before,
+            find: '</head>',
+            replacement: '<script>window.dd = "dd";</script>',
+          }
+        }
+      })
+    ]
+  })
+  await server.listen()
+  await page.goto(`http://localhost:${server.config.server.port}/demo1.html`)
+  expect(await page.content()).toMatchSnapshot()
+  await page.goto(`http://localhost:${server.config.server.port}/demo1.html`)
   expect(await page.content()).toMatchSnapshot()
   await server.close()
 })

@@ -45,6 +45,57 @@ exports[`html_with_entry_config 1`] = `
 </body></html>"
 `;
 
+exports[`html_with_inject_code_all_page 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+
+<script>window.dd = \\"dd\\";</script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`html_with_inject_code_all_page 2`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+
+<script>window.dd = \\"dd\\";</script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`html_with_inject_code_demo1 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+
+<script>window.dd = \\"dd\\";</script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
 exports[`html_with_template_config1 1`] = `
 "<!DOCTYPE html><html lang=\\"en\\"><head>
   <script type=\\"module\\" src=\\"/@vite/client\\"></script>
