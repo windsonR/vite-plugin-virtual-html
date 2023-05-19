@@ -99,3 +99,10 @@ module.exports = {
 
 处理`connect-history-api-fallback`的重写请求
 
+### urlTransformer
+
+完全由开发者自定义处理`dev-server`拦截到的url,传入的参数为(`resolvedUrl`,`req`)
+
+其中,第一个参数是插件初步处理的`url`字符串, 第二个参数是一个`req`对象(`http.IncomingMessage`)
+
+返回值为一个新的`url`字符串

@@ -20,6 +20,7 @@ browser.
 
 ## update
 
+1. `1.1.9` add `urlTransformer`function to support developer edit url
 1. `1.0.2` add `connect-history-api-fallback` support
 1. `0.4.0` add a new option to `pages`,just need an js file,plugin will auto generate a html file which include the
    entry js
@@ -165,7 +166,17 @@ is `['**/*.html', '!node_modules/**/*.html', '!.**/*.html']`
 
 In html file, put `replacement`before/after `find`
 
+### urlTransformer
+
+Allow plugin's user to fully customize the `url`, this is a function which has two param:(`resolvedUrl`,`req`)
+
+First param: `resolvedUrl` is a `string`, it means the plugin handles from `req` param.
+
+Second param : `req`, is a `http.IncommingMessage`
+
+This function must return a `string`
+
 ## NOTICE
 
-1. if you use same `template` file for multiple page, plese make sure the page's key is different.
+1. if you use same `template` file for multiple page, please make sure the page's key is different.
 2. please DO NOT use this plugin when you build a library(you can use this in dev NOT in build)
