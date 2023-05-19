@@ -156,6 +156,36 @@ exports[`index 2`] = `
 </body></html>"
 `;
 
+exports[`index with context 1 1`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/demo/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/demo/test/demo/demo1/demo1.ts\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
+exports[`index with context 1 2`] = `
+"<!DOCTYPE html><html lang=\\"en\\"><head>
+  <script type=\\"module\\" src=\\"/demo/@vite/client\\"></script>
+
+  <meta charset=\\"UTF-8\\">
+  <title>Demo</title>
+    <script type=\\"module\\" src=\\"/demo/test/demo/demo1/demo1.ts\\"></script>
+</head>
+<body>
+<div id=\\"app\\"></div>
+
+
+</body></html>"
+`;
+
 exports[`index_with_sub_folder 1`] = `
 "<!DOCTYPE html><html lang=\\"en\\"><head>
   <script type=\\"module\\" src=\\"/@vite/client\\"></script>

@@ -1,4 +1,4 @@
-import type { HtmlPluginOptions } from './types'
+import type { HtmlPluginOptions, UrlTransformerFunction } from './types'
 import { Base } from './Base'
 import { buildHistoryApiFallback } from '../history-api/historyApiFallbackPlugin'
 import type { ViteDevServer } from 'vite'
@@ -8,9 +8,12 @@ import { normalizePath } from './utils'
 export class Serve extends Base {
   _rewrites?: Array<HistoryRewrites>
   
+  _urlTransformer?: UrlTransformerFunction
+  
   constructor(virtualHtmlOptions: HtmlPluginOptions & HistoryApiOptions) {
     super(virtualHtmlOptions)
     this._rewrites = virtualHtmlOptions.rewrites
+    this._urlTransformer = virtualHtmlOptions.urlTransformer
   }
   
   _configureServer = (server: ViteDevServer) => {
@@ -23,6 +26,9 @@ export class Serve extends Base {
         const originalUrl = req.originalUrl
         const reqUrl = req.url
         let url = decodeURI(this.generateUrl(originalUrl?.endsWith('/') ? originalUrl : reqUrl))
+        if (this._urlTransformer) {
+          url = this._urlTransformer(url, req)
+        }
         // if request is not html , directly return next()
         if ((!url.endsWith('.html') && !url.endsWith('/')) && url !== '/') {
           return next()

@@ -28,6 +28,34 @@ test('index', async () => {
   await server.close()
 })
 
+test('index with context 1', async () => {
+  const context = '/demo/'
+  const server = await createServer({
+    base: context,
+    configFile: false,
+    plugins: [
+      VirtualHtml({
+        pages: {
+          demo1: '/test/demo/demo1/demo1.html',
+        },
+        indexPage: 'demo1',
+        urlTransformer(url){
+          return url.replace(context, '/')
+        }
+      })
+    ]
+  })
+  await server.listen()
+  await page.goto(`http://localhost:${server.config.server.port}${context}`)
+  const index = await page.content()
+  expect(index).toMatchSnapshot()
+  await page.goto(`http://localhost:${server.config.server.port}${context}demo1.html`)
+  const demo1 = await page.content()
+  expect(demo1).toMatchSnapshot()
+  expect(index).toBe(demo1)
+  await server.close()
+})
+
 test('index_with_sub_folder1', async () => {
   const server = await createServer({
     configFile: false,

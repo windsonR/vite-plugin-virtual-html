@@ -1,3 +1,5 @@
+import { type IncomingMessage } from 'http'
+
 export type PageObject = {
   template: string,
   data?: VirtualHtmlTemplateData,
@@ -22,6 +24,8 @@ export type VirtualPageOptions = {
   body?: string,
 }
 
+export type UrlTransformerFunction = (resolvedUrl: string,req: IncomingMessage) => string
+
 /**
  * plugin config options
  */
@@ -31,6 +35,12 @@ export type HtmlPluginOptions = {
    * if it is true, plugin will use glob to find all the html page in project to generate a json like {a: /src/a/a.html,}
    */
   pages?: Pages | true,
+  /**
+   * transform url to another url by user.
+   * This is ONLY apply in dev mode.
+   * @param url
+   */
+  urlTransformer?: UrlTransformerFunction
   /**
    * define the index page,to replace default index.html
    * this page will trigger `transformIndexHtml` hook.
