@@ -38,7 +38,7 @@ export class Build extends Base {
     for (let i = 0; i < pagesKey.length; i++) {
       const key = pagesKey[i]
       const pageOption = this._pages[key]
-      const vHtml = normalizePath(path.resolve(this.cwd, `./${config.root ? this.addTrailingSlash(config.root) : ''}${key}.html`))
+      const vHtml = normalizePath(path.resolve(this.cwd, `./${config.root ? this.addTrailingSlash(config.root) : ''}${this.htmlNameAddIndex(key)}.html`))
       if (!fs.existsSync(vHtml)) {
         this._needRemove.push(vHtml)
         await this.checkVirtualPath(vHtml, this._needRemove)
@@ -87,9 +87,13 @@ export class Build extends Base {
   extractHtmlPath(pages: { [p: string]: VirtualHtmlPage | VirtualPageOptions }) {
     const newPages: { [key: string]: string } = {}
     Object.keys(pages).forEach(key => {
-      newPages[key] = `/${key}.html`
+      newPages[key] = `/${this.htmlNameAddIndex(key)}.html`
     })
     return newPages
+  }
+
+  htmlNameAddIndex(htmlName: string): string{
+    return htmlName.endsWith('/') ? htmlName + 'index' : htmlName
   }
 
 }
