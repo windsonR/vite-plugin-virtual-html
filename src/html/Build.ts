@@ -20,14 +20,15 @@ export class Build extends Base {
    * @param html
    * @param needRemove
    */
-  async checkVirtualPath(html: string, needRemove: Array<string>) {
+  async checkVirtualPath(html: string, needRemove: Array<string>, root: string) {
+    const cwd = path.resolve(this.cwd, root)
     const pathArr = html.split('/')
     const fileName = pathArr[pathArr.length - 1]
-    const middlePath = html.replace(fileName, '').replace(this.cwd, '')
+    const middlePath = html.replace(fileName, '').replace(cwd, '')
     const firstPath = middlePath.split('/')[1]
     if (!fs.existsSync(middlePath)) {
-      needRemove.push(normalizePath(path.resolve(this.cwd, `./${firstPath}`)))
-      await fsp.mkdir(path.resolve(this.cwd, `./${middlePath}`), {
+      needRemove.push(normalizePath(path.resolve(cwd, `./${firstPath}`)))
+      await fsp.mkdir(path.resolve(cwd, `./${middlePath}`), {
         recursive: true
       })
     }
@@ -41,7 +42,7 @@ export class Build extends Base {
       const vHtml = normalizePath(path.resolve(this.cwd, `./${config.root ? this.addTrailingSlash(config.root) : ''}${this.htmlNameAddIndex(key)}.html`))
       if (!fs.existsSync(vHtml)) {
         this._needRemove.push(vHtml)
-        await this.checkVirtualPath(vHtml, this._needRemove)
+        await this.checkVirtualPath(vHtml, this._needRemove, config.root)
         if (typeof pageOption === 'string' || 'template' in pageOption) {
           const genPageOption = await this.generatePageOptions(pageOption, this._globalData, this._globalRender)
           await fsp.copyFile(path.resolve(this.cwd, `.${genPageOption.template}`), vHtml)
