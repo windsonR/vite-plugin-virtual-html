@@ -69,6 +69,10 @@ module.exports = {
 
 当配置为`true`时,会根据`extraGlobPattern`的配置自动读取项目中的`html`文件路径并生成`pages`对象
 
+**注意:**
+
+- `entry`与`template`目前不能同时使用
+
 
 ### extraGlobPattern
 
