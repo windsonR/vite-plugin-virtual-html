@@ -35,6 +35,7 @@ export class Build extends Base {
   }
 
   async _buildConfig(config: UserConfig,) {
+    this._config = config
     const pagesKey = Object.keys(this._pages)
     for (let i = 0; i < pagesKey.length; i++) {
       const key = pagesKey[i]
@@ -42,7 +43,7 @@ export class Build extends Base {
       const vHtml = normalizePath(path.resolve(this.cwd, `./${config.root ? this.addTrailingSlash(config.root) : ''}${this.htmlNameAddIndex(key)}.html`))
       if (!fs.existsSync(vHtml)) {
         this._needRemove.push(vHtml)
-        await this.checkVirtualPath(vHtml, this._needRemove, config.root)
+        await this.checkVirtualPath(vHtml, this._needRemove, config.root??'')
         if (typeof pageOption === 'string' || 'template' in pageOption) {
           const genPageOption = await this.generatePageOptions(pageOption, this._globalData, this._globalRender)
           await fsp.copyFile(path.resolve(this.cwd, `.${genPageOption.template}`), vHtml)
