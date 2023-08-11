@@ -1,13 +1,17 @@
-import type {Connect, Plugin, ViteDevServer} from "vite"
-import history from "connect-history-api-fallback"
-import type {HistoryApiOptions, HistoryRewrites} from "./types"
+import type { Connect, Plugin, ViteDevServer } from 'vite'
+import history from 'connect-history-api-fallback'
+import type { HistoryApiOptions, HistoryRewrites } from './types'
 
 // noinspection JSUnusedGlobalSymbols
 export const historyApiFallbackPlugin = (historyApiOptions: HistoryApiOptions): Plugin => {
-  const {rewrites} = historyApiOptions
+  const {
+    rewrites,
+    usePreview
+  } = historyApiOptions
+  const configureServerHookName = usePreview ? 'configurePreviewServer' : 'configureServer'
   return {
     name: 'vite-plugin-virtual-html:history',
-    configureServer(server: ViteDevServer) {
+    [configureServerHookName](server: ViteDevServer) {
       if (rewrites) {
         buildHistoryApiFallback(server, rewrites)
       }
