@@ -21,7 +21,7 @@ export class Build extends Base {
    * @param needRemove
    */
   async checkVirtualPath(html: string, needRemove: Array<string>, root: string) {
-    const cwd = path.resolve(this.cwd, root)
+    const cwd = normalizePath(path.resolve(this.cwd, root))
     const pathArr = html.split('/')
     const fileName = pathArr[pathArr.length - 1]
     const middlePath = html.replace(fileName, '').replace(cwd, '')
