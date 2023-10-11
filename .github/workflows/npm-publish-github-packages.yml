@@ -19,10 +19,10 @@ jobs:
       - uses: pnpm/action-setup@646cdf48217256a3d0b80361c5a50727664284f2
         with:
           version: 7.16.0
-      - name: Use Node.js 16.19.0
+      - name: Use Node.js 18.18.0
         uses: actions/setup-node@v3
         with:
-          node-version: 16.19.0
+          node-version: 18.18.0
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm i
