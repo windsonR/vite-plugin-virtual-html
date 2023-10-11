@@ -1,5 +1,5 @@
 import {HtmlPluginOptions} from "./types"
-import type {ConfigEnv, Plugin, UserConfig, ViteDevServer} from 'vite'
+import { ConfigEnv, Plugin, ResolvedConfig, UserConfig, ViteDevServer } from 'vite'
 import {HistoryApiOptions} from "../history-api/types"
 import { Serve } from './Serve'
 import { Build } from './Build'
@@ -25,6 +25,7 @@ export default class VirtualHtmlPlugin implements Plugin {
   }
 
   async config(config: UserConfig, {command}: ConfigEnv) {
+    config.appType = 'custom'
     this._config = config
     if (command === 'serve') {
       const serve = new Serve(this._htmlOptions)
