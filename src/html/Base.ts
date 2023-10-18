@@ -111,10 +111,10 @@ export class Base {
       const key = ids[ids.length - 1]
       let _code = code
       if (DEFAULT_INJECTCODE_ALL in this._injectCode) {
-        _code = this.generateInjectCode(this._injectCode[DEFAULT_INJECTCODE_ALL], code)
+        _code = this.generateInjectCode(this._injectCode[DEFAULT_INJECTCODE_ALL], _code)
       }
       if (key in this._injectCode) {
-        _code = this.generateInjectCode(this._injectCode[key], code)
+        _code = this.generateInjectCode(this._injectCode[key], _code)
       }
       return _code
     }
