@@ -6,6 +6,9 @@ import * as fs from 'fs'
 import { normalizePath, } from './utils'
 import glob from 'fast-glob'
 import debug from 'debug'
+import { createRequire } from 'node:module';
+
+const _require = createRequire(import.meta.url);
 
 const fsp = fs.promises
 const DEFAULT_GLOB_PATTERN = [
@@ -287,8 +290,8 @@ export class Base {
   
   defaultRender = (template: string, data: Record<string, any>) => {
     try {
-      const resolved = require.resolve('ejs')
-      return require(resolved).render(template, data, {
+      const resolved = _require.resolve('ejs')
+      return _require(resolved).render(template, data, {
         delimiter: '%',
         root: process.cwd()
       })
