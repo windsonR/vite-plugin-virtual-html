@@ -6,9 +6,9 @@ import * as fs from 'fs'
 import { normalizePath, } from './utils'
 import glob from 'fast-glob'
 import debug from 'debug'
-import { createRequire } from 'node:module';
+import { createRequire } from 'node:module'
 
-const _require = createRequire(import.meta.url);
+const _require = import.meta.url !== undefined ? createRequire(import.meta.url) : require
 
 const fsp = fs.promises
 const DEFAULT_GLOB_PATTERN = [
@@ -76,7 +76,7 @@ export class Base {
   _load = async (id: string) => {
     if (this._filter(id)) {
       let newId = this.getHtmlName(id, this._config?.root)
-      const maybeIndexName1 = (newId+'/').replace('//', '/')
+      const maybeIndexName1 = (newId + '/').replace('//', '/')
       const maybeIndexName2 = (newId + '/index').replace('//', '/')
       const maybeIndexName3 = newId.replace('index', '').replace('//', '/')
       
@@ -132,8 +132,8 @@ export class Base {
   getHtmlName = (id: string, root?: string) => {
     const _root = (root ?? '').replace(this.cwd, '')
     const _id = id.replace(this.cwd, '')
-    const result = _id.replace('.html','').replace(_root !== '' ? this.addTrailingSlash(_root) : '', '')
-    return result.startsWith('/') ? result.substring(1,result.length) : result
+    const result = _id.replace('.html', '').replace(_root !== '' ? this.addTrailingSlash(_root) : '', '')
+    return result.startsWith('/') ? result.substring(1, result.length) : result
   }
   
   /**
@@ -274,8 +274,8 @@ export class Base {
       realPattern = DEFAULT_GLOB_PATTERN
     } else {
       const set: Set<string> = new Set()
-      DEFAULT_GLOB_PATTERN.forEach(dg=>set.add(dg))
-      extraGlobPattern.forEach(dg=>set.add(dg))
+      DEFAULT_GLOB_PATTERN.forEach(dg => set.add(dg))
+      extraGlobPattern.forEach(dg => set.add(dg))
       for (let key of set.keys()) {
         realPattern.push(key)
       }
