@@ -4,7 +4,7 @@ import {HistoryApiOptions} from "../history-api/types"
 import { Serve } from './Serve'
 import { Build } from './Build'
 
-export default class VirtualHtmlPlugin implements Plugin {
+export class VirtualHtmlPlugin implements Plugin {
   name = 'vite-plugin-virtual-html'
 
   _htmlOptions: HtmlPluginOptions
