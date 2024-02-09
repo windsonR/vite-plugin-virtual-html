@@ -1,15 +1,15 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`template_ejs 1`] = `
-"<!DOCTYPE html><html lang=\\"en\\"><head>
-  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+"<!DOCTYPE html><html lang="en"><head>
+  <script type="module" src="/@vite/client"></script>
 
-  <meta charset=\\"UTF-8\\">
+  <meta charset="UTF-8">
   <title>Demo1</title>
-    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+    <script type="module" src="/test/demo/demo1/demo1.ts"></script>
 </head>
 <body>
-<div id=\\"app\\"></div>
+<div id="app"></div>
 <div>a | b | c</div>
 
 
@@ -17,15 +17,15 @@ exports[`template_ejs 1`] = `
 `;
 
 exports[`template_ejs 2`] = `
-"<!DOCTYPE html><html lang=\\"en\\"><head>
-  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+"<!DOCTYPE html><html lang="en"><head>
+  <script type="module" src="/@vite/client"></script>
 
-  <meta charset=\\"UTF-8\\">
+  <meta charset="UTF-8">
   <title>Demo2</title>
-    <script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"></script>
+    <script type="module" src="/test/demo/demo1/demo1.ts"></script>
 </head>
 <body>
-<div id=\\"app\\"></div>
+<div id="app"></div>
 <div>a | b | c</div>
 &lt;p&gt;I am a test partial&lt;/p&gt;
 
@@ -34,15 +34,15 @@ exports[`template_ejs 2`] = `
 `;
 
 exports[`template_ejs 3`] = `
-"<!DOCTYPE html><html lang=\\"en\\"><head>
-  <script type=\\"module\\" src=\\"/@vite/client\\"></script>
+"<!DOCTYPE html><html lang="en"><head>
+  <script type="module" src="/@vite/client"></script>
 
-  <meta charset=\\"UTF-8\\">
+  <meta charset="UTF-8">
   <title>Demo3</title>
-    </head><body>&lt;script type=\\"module\\" src=\\"/test/demo/demo1/demo1.ts\\"&gt;&lt;/script&gt;
+    </head><body>&lt;script type="module" src="/test/demo/demo1/demo1.ts"&gt;&lt;/script&gt;
 
 
-<div id=\\"app\\"></div>
+<div id="app"></div>
 
 
 </body></html>"
