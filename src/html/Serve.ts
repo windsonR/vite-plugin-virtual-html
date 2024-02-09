@@ -2,8 +2,8 @@ import type { HtmlPluginOptions, UrlTransformerFunction } from './types'
 import { Base } from './Base'
 import { buildHistoryApiFallback } from '../history-api/historyApiFallbackPlugin'
 import type { ViteDevServer } from 'vite'
+import { normalizePath } from 'vite'
 import type { HistoryApiOptions, HistoryRewrites } from '../history-api/types'
-import { normalizePath } from './utils'
 
 export class Serve extends Base {
   _rewrites?: Array<HistoryRewrites>

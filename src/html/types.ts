@@ -16,7 +16,9 @@ export type VirtualHtmlTemplateRender = (template: string, data: Record<string, 
 
 export type VirtualHtmlTemplateData = Record<string, any>
 
-export type Pages = { [key: string]: VirtualHtmlPage }
+export type Pages = {
+  [key: string]: VirtualHtmlPage
+}
 
 export type VirtualPageOptions = {
   entry: string,
@@ -24,7 +26,7 @@ export type VirtualPageOptions = {
   body?: string,
 }
 
-export type UrlTransformerFunction = (resolvedUrl: string,req: IncomingMessage) => string
+export type UrlTransformerFunction = (resolvedUrl: string, req: IncomingMessage) => string
 
 /**
  * plugin config options
@@ -64,15 +66,14 @@ export type HtmlPluginOptions = {
    * key: html name, can be *
    */
   injectCode?: Record<string, InjectCode>
-
+  
 }
 
 /**
  * inject code to tag's before or after
  */
 export enum POS {
-  before,
-  after
+  before, after
 }
 
 /**

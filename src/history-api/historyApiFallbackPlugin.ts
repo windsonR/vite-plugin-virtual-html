@@ -27,10 +27,7 @@ export const historyApiFallbackPlugin = (historyApiOptions: HistoryApiOptions): 
 export function buildHistoryApiFallback(server: ViteDevServer, rewrites: Array<HistoryRewrites>) {
   server.middlewares.use(history({
     disableDotRule: undefined,
-    htmlAcceptHeaders: [
-      'text/html',
-      'application/xhtml+xml'
-    ],
+    htmlAcceptHeaders: ['text/html', 'application/xhtml+xml'],
     rewrites: rewrites,
   }) as Connect.NextHandleFunction)
 }

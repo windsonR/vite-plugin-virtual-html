@@ -1,7 +1,7 @@
-import type {Plugin,} from 'vite'
-import type {HtmlPluginOptions,} from './html/types'
-import { VirtualHtmlPlugin } from "./html/VirtualHtmlPlugin"
-import type {HistoryApiOptions} from "./history-api/types"
+import type { Plugin, } from 'vite'
+import type { HtmlPluginOptions, } from './html/types'
+import { VirtualHtmlPlugin } from './html/VirtualHtmlPlugin'
+import type { HistoryApiOptions } from './history-api/types'
 
 export default (virtualHtmlOptions: HtmlPluginOptions & HistoryApiOptions): Plugin => {
   return new VirtualHtmlPlugin(virtualHtmlOptions)

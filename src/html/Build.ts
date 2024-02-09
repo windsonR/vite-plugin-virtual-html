@@ -1,20 +1,20 @@
-import type {HtmlPluginOptions} from "./types"
-import {VirtualHtmlPage, VirtualPageOptions} from "./types"
-import type {UserConfig} from 'vite'
-import {Base} from "./Base"
-import fs, {promises as fsp} from "fs"
-import path from "path"
-import {normalizePath} from "./utils"
+import type { HtmlPluginOptions } from './types'
+import { VirtualHtmlPage, VirtualPageOptions } from './types'
+import type { UserConfig } from 'vite'
+import { normalizePath } from 'vite'
+import { Base } from './Base'
+import fs, { promises as fsp } from 'fs'
+import path from 'path'
 
 export class Build extends Base {
-
+  
   _needRemove: Array<string> = []
   _distDir!: string
-
+  
   constructor(virtualHtmlOptions: HtmlPluginOptions) {
     super(virtualHtmlOptions)
   }
-
+  
   /**
    * check html file's parent directory
    * @param html
@@ -33,7 +33,7 @@ export class Build extends Base {
       })
     }
   }
-
+  
   async _buildConfig(config: UserConfig,) {
     this._config = config
     const pagesKey = Object.keys(this._pages)
@@ -43,7 +43,7 @@ export class Build extends Base {
       const vHtml = normalizePath(path.resolve(this.cwd, `./${config.root ? this.addTrailingSlash(config.root) : ''}${this.htmlNameAddIndex(key)}.html`))
       if (!fs.existsSync(vHtml)) {
         this._needRemove.push(vHtml)
-        await this.checkVirtualPath(vHtml, this._needRemove, config.root??'')
+        await this.checkVirtualPath(vHtml, this._needRemove, config.root ?? '')
         if (typeof pageOption === 'string' || 'template' in pageOption) {
           const genPageOption = await this.generatePageOptions(pageOption, this._globalData, this._globalRender)
           await fsp.copyFile(path.resolve(this.cwd, `.${genPageOption.template}`), vHtml)
@@ -68,7 +68,7 @@ export class Build extends Base {
       },
     }
   }
-
+  
   _closeBundle() {
     // remove files should not be under project root
     for (let vHtml of this._needRemove) {
@@ -81,21 +81,25 @@ export class Build extends Base {
       }
     }
   }
-
+  
   /**
    * use pages' key as html name
    * @param pages
    */
-  extractHtmlPath(pages: { [p: string]: VirtualHtmlPage | VirtualPageOptions }) {
-    const newPages: { [key: string]: string } = {}
+  extractHtmlPath(pages: {
+    [p: string]: VirtualHtmlPage | VirtualPageOptions
+  }) {
+    const newPages: {
+      [key: string]: string
+    } = {}
     Object.keys(pages).forEach(key => {
       newPages[key] = `/${this.htmlNameAddIndex(key)}.html`
     })
     return newPages
   }
-
-  htmlNameAddIndex(htmlName: string): string{
+  
+  htmlNameAddIndex(htmlName: string): string {
     return htmlName.endsWith('/') ? htmlName + 'index' : htmlName
   }
-
+  
 }
