@@ -6,6 +6,7 @@ import * as fs from 'fs'
 import glob from 'fast-glob'
 import debug from 'debug'
 import { createRequire } from 'node:module'
+import MagicString from 'magic-string'
 
 const _require = import.meta.url !== undefined ? createRequire(import.meta.url) : require
 
@@ -15,7 +16,8 @@ const DEFAULT_GLOB_PATTERN = [
   '!node_modules/**/*.html',
   '!.**/*.html'
 ]
-const VIRTUAL_HTML_CONTENT = `
+
+const VIRTUAL_HTML_CONTENT = new MagicString(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,26 +29,26 @@ const VIRTUAL_HTML_CONTENT = `
 #BODY#
 </body>
 </html>
-`
+`)
 export const DEFAULT_INJECTCODE_ALL = '*'
 
 export class Base {
   _config?: UserConfig
-  
+
   _pages: Pages
-  
+
   _indexPage: string
-  
+
   _globalRender: VirtualHtmlTemplateRender
-  
+
   _globalData: Record<string, unknown>
-  
+
   _injectCode: Record<string, InjectCode>
-  
+
   cwd = normalizePath(process.cwd())
   logger = debug('vite-plugin-virtual-html')
   _filter: (id: string | unknown) => boolean
-  
+
   constructor(virtualHtmlOptions: HtmlPluginOptions) {
     const {
       pages: pagesObj,
@@ -67,7 +69,7 @@ export class Base {
     this._injectCode = injectCode
     this._filter = createFilter(/\.html|\/$/,)
   }
-  
+
   /**
    * load html file
    * @param id
@@ -78,7 +80,7 @@ export class Base {
       const maybeIndexName1 = (newId + '/').replace('//', '/')
       const maybeIndexName2 = (newId + '/index').replace('//', '/')
       const maybeIndexName3 = newId.replace('index', '').replace('//', '/')
-      
+
       const pageOption: VirtualHtmlPage | VirtualPageOptions = this._pages[newId] || this._pages[maybeIndexName1] || this._pages[maybeIndexName2] || this._pages[maybeIndexName3]
       if (pageOption !== undefined) {
         // string
@@ -99,9 +101,9 @@ export class Base {
         }
       }
     }
-    return null
+    return undefined
   }
-  
+
   /**
    * transform code to inject some code into original code
    * @param code
@@ -122,7 +124,7 @@ export class Base {
     }
     return null
   }
-  
+
   /**
    * get html file's name
    * @param id
@@ -134,7 +136,7 @@ export class Base {
     const result = _id.replace('.html', '').replace(_root !== '' ? this.addTrailingSlash(_root) : '', '')
     return result.startsWith('/') ? result.substring(1, result.length) : result
   }
-  
+
   /**
    * add trailing slash on path
    * @param {string} path
@@ -144,7 +146,7 @@ export class Base {
     const _path = normalizePath(path.replace(this.cwd, ''))
     return _path.endsWith('/') ? _path : `${_path}/`
   }
-  
+
   /**
    * generate URL
    * @param url
@@ -159,7 +161,7 @@ export class Base {
     }
     return url
   }
-  
+
   /**
    * read HTML file from disk and generate code from template system(with render function)
    * @param template
@@ -167,10 +169,10 @@ export class Base {
    * @param render
    */
   readHtml = async ({
-                      template = '',
-                      data = {},
-                      render = this.defaultRender
-                    }: PageObject) => {
+    template = '',
+    data = {},
+    render = this.defaultRender
+  }: PageObject) => {
     const templatePath = path.resolve(this.cwd, `.${template}`)
     if (!fs.existsSync(templatePath)) {
       this.logger('[vite-plugin-virtual-html]: template file must exist!')
@@ -178,7 +180,7 @@ export class Base {
     }
     return await this.renderTemplate(templatePath, render, data)
   }
-  
+
   /**
    * render template
    * @param templatePath
@@ -186,11 +188,10 @@ export class Base {
    * @param data
    */
   renderTemplate = async (templatePath: string, render: VirtualHtmlTemplateRender, data: VirtualHtmlTemplateData) => {
-    return await this.readTemplate(templatePath).then(code => {
-      return render(code, data)
-    })
+    const code = await this.readTemplate(templatePath)
+    return render(code, data)
   }
-  
+
   /**
    * read html file's content to render with render function
    * @param templatePath
@@ -199,7 +200,7 @@ export class Base {
     const result = await fsp.readFile(templatePath)
     return result.toString()
   }
-  
+
   /**
    * generate page option from string/object to object
    * @param page
@@ -230,17 +231,17 @@ export class Base {
       render: render ?? globalRender ?? this.defaultRender,
     }
   }
-  
+
   /**
    * directly use find\replacement / replacement\find to replace find
    * @param {pos, find, replacement}
    * @param code
    */
   generateInjectCode = ({
-                          pos,
-                          find,
-                          replacement
-                        }: InjectCode, code: string): string => {
+    pos,
+    find,
+    replacement
+  }: InjectCode, code: string): string => {
     if (pos === POS.after) {
       return code.replace(find, `${find}\n${replacement}`)
     }
@@ -249,7 +250,7 @@ export class Base {
     }
     return code
   }
-  
+
   /**
    * generate page from virtual page
    * @param vPages
@@ -260,9 +261,13 @@ export class Base {
       title = '',
       body = '<div id="app"></div>'
     } = vPages
-    return VIRTUAL_HTML_CONTENT.replace('#ENTRY#', entry).replace('#TITLE#', title).replace('#BODY#', body)
+    return VIRTUAL_HTML_CONTENT
+      .replace('#ENTRY#', entry)
+      .replace('#TITLE#', title)
+      .replace('#BODY#', body)
+      .toString()
   }
-  
+
   /**
    * find all html file in project and return it as Pages
    */
@@ -286,7 +291,7 @@ export class Base {
     })
     return pages
   }
-  
+
   defaultRender = (template: string, data: Record<string, any>) => {
     try {
       const resolved = _require.resolve('ejs')
