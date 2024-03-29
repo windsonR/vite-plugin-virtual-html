@@ -2,8 +2,11 @@ import type { HtmlPluginOptions, UrlTransformerFunction } from './types'
 import { Base } from './Base'
 import { buildHistoryApiFallback } from '../history-api/historyApiFallbackPlugin'
 import type { ViteDevServer } from 'vite'
-import { normalizePath } from 'vite'
+import { normalizePath, createFilter, } from 'vite'
 import type { HistoryApiOptions, HistoryRewrites } from '../history-api/types'
+
+const HTML_INCLUDE = [/\.html$/,/\/$/]
+const HTML_FILTER = createFilter(HTML_INCLUDE)
 
 export class Serve extends Base {
   _rewrites?: Array<HistoryRewrites>
@@ -22,20 +25,21 @@ export class Serve extends Base {
     }
     // other html handled after vite's inner middlewares.
     return () => {
-      server.middlewares.use('/', async (req, res, next) => {
+      server.middlewares.use(async (req, res, next) => {
         const originalUrl = req.originalUrl
         const reqUrl = req.url
         let url = decodeURI(this.generateUrl(originalUrl?.endsWith('/') ? originalUrl : reqUrl))
+        // allow user customize url transformer
         if (this._urlTransformer) {
           url = this._urlTransformer(url, req)
         }
         // if request is not html , directly return next()
-        if ((!url.endsWith('.html') && !url.endsWith('/')) && url !== '/') {
+        if (!HTML_FILTER(url) && url !== '/') {
           return next()
         }
         // request / means client requests an index page
         // load it with indexPage config
-        let htmlCode: string
+        let htmlCode: string|undefined
         if (url === '/' || url === '/index.html') {
           url = `/${this._indexPage}.html`
         }
