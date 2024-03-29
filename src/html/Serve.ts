@@ -44,7 +44,12 @@ export class Serve extends Base {
           url = `/${this._indexPage}.html`
         }
         // load specify html file code
-        htmlCode = await this._load(normalizePath(url)) ?? ''
+        htmlCode = await this._load(normalizePath(url))
+        if (htmlCode === undefined) {
+          res.statusCode = 404
+          res.end()
+          return next()
+        }
         const transformResult = await this._transform(htmlCode, url)
         if (transformResult === null) {
           return next()
