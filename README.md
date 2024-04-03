@@ -180,3 +180,7 @@ This function must return a `string`
 
 1. if you use same `template` file for multiple page, please make sure the page's key is different.
 2. please DO NOT use this plugin when you build a library(you can use this in dev NOT in build)
+
+## Thanks
+
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
