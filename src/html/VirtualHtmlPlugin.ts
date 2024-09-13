@@ -30,12 +30,12 @@ export class VirtualHtmlPlugin implements Plugin {
     if (command === 'serve') {
       const serve = new Serve(this._htmlOptions)
       this.configureServer = serve._configureServer.bind(serve)
-      this.load = serve._load.bind(serve)
+      this.load = serve._load.bind(serve) as (id: string) => Promise<string | null>
       this.transform = serve._transform.bind(serve)
     } else if (command === 'build') {
       const build = new Build(this._htmlOptions)
       await build._buildConfig.call(build, config)
-      this.load = build._load.bind(build)
+      this.load = build._load.bind(build) as (id: string) => Promise<string | null>
       this.transform = build._transform.bind(build)
       this.closeBundle = build._closeBundle.bind(build)
     }
