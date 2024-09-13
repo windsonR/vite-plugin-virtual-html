@@ -1,7 +1,5 @@
-export type HistoryRewrites = {
-  from: RegExp,
-  to: string,
-}
+import type {Rewrite} from 'connect-history-api-fallback'
+export type HistoryRewrites = Rewrite
 
 export type HistoryApiOptions = {
   /**
