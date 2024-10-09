@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-virtual-html",
-  "version": "1.2.0",
+  "version": "1.2.0-test",
   "description": "Vite plugin to load html anywhere",
   "type": "module",
   "main": "./dist/index.cjs",
