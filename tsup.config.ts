@@ -4,7 +4,7 @@ export const tsup =  defineConfig({
   entry: [
     'src/index.ts',
   ],
-  format: ['cjs', 'esm'],
+  format: ['esm'],
   dts: true,
   splitting: false,
   clean: true,
