@@ -1,0 +1,26 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Publish npm package
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4.0.4
+        with:
+          node-version: 22.9.0
+          registry-url: https://registry.npmjs.org/
+          cache: 'pnpm'
+      - run: npm install corepack -g
+      - run: corepack enable
+      - run: corepack install -g pnpm@9.12.1
+      - run: pnpm install
+      - run: npx playwright install
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
