@@ -189,7 +189,7 @@ export class Base {
    */
   renderTemplate = async (templatePath: string, render: VirtualHtmlTemplateRender, data: VirtualHtmlTemplateData) => {
     const code = await this.readTemplate(templatePath)
-    return render(code, data)
+    return render(code, data, templatePath.substring(templatePath.lastIndexOf(path.sep)+1))
   }
 
   /**
@@ -292,7 +292,7 @@ export class Base {
     return pages
   }
 
-  defaultRender = (template: string, data: Record<string, any>) => {
+  defaultRender: VirtualHtmlTemplateRender = (template: string, data: Record<string, any>) => {
     try {
       const resolved = _require.resolve('ejs')
       return _require(resolved).render(template, data, {

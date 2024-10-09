@@ -12,7 +12,7 @@ export type VirtualHtmlPage = string | PageObject | VirtualPageOptions
 /**
  * html template render
  */
-export type VirtualHtmlTemplateRender = (template: string, data: Record<string, any>) => string
+export type VirtualHtmlTemplateRender = (template: string, data: Record<string, any>, htmlName?: string) => string
 
 export type VirtualHtmlTemplateData = Record<string, any>
 

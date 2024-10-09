@@ -1,5 +1,5 @@
 import { HtmlPluginOptions } from './types'
-import { ConfigEnv, Plugin, UserConfig, ViteDevServer } from 'vite'
+import type { ConfigEnv, Plugin, UserConfig, ViteDevServer } from 'vite'
 import { HistoryApiOptions } from '../history-api/types'
 import { Serve } from './Serve'
 import { Build } from './Build'
