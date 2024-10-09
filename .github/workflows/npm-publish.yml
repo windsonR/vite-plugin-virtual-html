@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4.0.0
+        with:
+          version: 9.12.1
       - uses: actions/setup-node@v4.0.4
         with:
           node-version: 22.9.0
           registry-url: https://registry.npmjs.org/
           cache: 'pnpm'
-      - uses: pnpm/action-setup@v4.0.0
-        with:
-          version: 9.12.1
       - run: npm install corepack -g
       - run: corepack enable
       - run: pnpm install
