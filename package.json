@@ -39,16 +39,16 @@
     "@types/connect-history-api-fallback": "^1.5.4",
     "@types/debug": "^4.1.12",
     "@types/ejs": "^3.1.5",
-    "@types/node": "^22.7.5",
-    "@vitejs/plugin-vue": "^5.1.4",
-    "@vue/compiler-sfc": "^3.5.11",
-    "playwright-chromium": "^1.48.0",
-    "tsup": "^8.3.0",
-    "typescript": "^5.6.3",
-    "vite-plugin-inspect": "^0.8.7",
-    "vitest": "^2.1.2",
-    "vue": "^3.5.11",
-    "vue-router": "^4.4.5"
+    "@types/node": "^20.11.5",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/compiler-sfc": "^3.4.15",
+    "playwright-chromium": "^1.41.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vite-plugin-inspect": "^10.0.6",
+    "vitest": "^1.2.1",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "dependencies": {
     "connect-history-api-fallback": "^2.0.0",
@@ -56,6 +56,6 @@
     "ejs": "^3.1.10",
     "fast-glob": "^3.3.2",
     "magic-string": "^0.30.11",
-    "vite": "^5.4.8"
+    "vite": "^6.0.7"
   }
 }
