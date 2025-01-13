@@ -13,9 +13,7 @@ export default defineConfig({
     }
   },
   plugins: [
-    Inspect({
-      enabled: true,
-    }),
+    Inspect(),
     Vue(),
     VirtualHtml({
       pages: {
