@@ -84,7 +84,7 @@ export class Base {
 
   /**
    * load html file
-   * @param id
+   * @param args
    */
   _load = async (...args: [string, unknown]) => {
     const [id] = args;
@@ -131,8 +131,7 @@ export class Base {
 
   /**
    * transform code to inject some code into original code
-   * @param code
-   * @param id
+   * @param args
    */
   _transform = async (
     ...args: [string, string, unknown]

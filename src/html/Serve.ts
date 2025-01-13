@@ -44,12 +44,14 @@ export class Serve extends Base {
           url = `/${this._indexPage}.html`
         }
         // load specify html file code
+        // @ts-ignore
         htmlCode = await this._load(normalizePath(url))
         if (htmlCode === undefined) {
           res.statusCode = 404
           res.end()
           return next()
         }
+        // @ts-ignore
         const transformResult = await this._transform(htmlCode, url)
         if (transformResult === null) {
           return next()
