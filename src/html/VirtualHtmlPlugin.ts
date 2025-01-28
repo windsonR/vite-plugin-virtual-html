@@ -1,6 +1,6 @@
-import { HtmlPluginOptions } from "./types";
+import type { HtmlPluginOptions } from "./types";
 import type { ConfigEnv, Plugin, UserConfig } from "vite";
-import { HistoryApiOptions } from "../history-api/types";
+import type { HistoryApiOptions } from "../history-api/types";
 import { Serve } from "./Serve";
 import { Build } from "./Build";
 
