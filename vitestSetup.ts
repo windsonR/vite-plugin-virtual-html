@@ -6,4 +6,5 @@ beforeAll(async ()=>{
   const browser = await chromium.launch()
   const context = await browser.newContext()
   page = await context.newPage()
+  page.once('load', () => console.log('Page loaded!'));
 })
