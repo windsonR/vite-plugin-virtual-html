@@ -13,9 +13,11 @@ export const VirtualHtmlPlugin = (
   return {
     name: "vite-plugin-virtual-html",
     async config(config: UserConfig, { command }: ConfigEnv) {
-      config.appType = "custom";
       _config = config;
       if (command === "serve") {
+        if (_htmlOptions.useCustom) {
+          config.appType = "custom";
+        }
         _instance = new Serve(_htmlOptions);
       } else if (command === "build") {
         _instance = new Build(_htmlOptions);

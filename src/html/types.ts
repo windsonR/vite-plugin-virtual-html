@@ -66,7 +66,10 @@ export type HtmlPluginOptions = {
    * key: html name, can be *
    */
   injectCode?: Record<string, InjectCode>
-  
+  /**
+   * is set appType to custom?
+   */
+  useCustom?: boolean
 }
 
 /**
