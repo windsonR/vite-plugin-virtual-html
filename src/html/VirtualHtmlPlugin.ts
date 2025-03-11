@@ -15,7 +15,7 @@ export const VirtualHtmlPlugin = (
     async config(config: UserConfig, { command }: ConfigEnv) {
       _config = config;
       if (command === "serve") {
-        if (_htmlOptions.useCustom) {
+        if (_htmlOptions.useCustom??true) {
           config.appType = "custom";
         }
         _instance = new Serve(_htmlOptions);
