@@ -70,6 +70,7 @@ export type HtmlPluginOptions = {
    * is set appType to custom?
    */
   useCustom?: boolean
+  cwd?: string
 }
 
 /**

@@ -69,6 +69,7 @@ export class Base {
       data = {},
       extraGlobPattern = [],
       injectCode = {},
+      cwd = normalizePath(process.cwd())
     } = virtualHtmlOptions;
     if (pagesObj === true || pagesObj === undefined) {
       this._pages = this.findAllHtmlInProject(extraGlobPattern);
@@ -80,6 +81,7 @@ export class Base {
     this._globalRender = render;
     this._injectCode = injectCode;
     this._filter = createFilter(/\.html|\/$/);
+    this.cwd = cwd
   }
 
   /**
