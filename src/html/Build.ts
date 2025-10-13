@@ -1,18 +1,22 @@
 import type { HtmlPluginOptions } from './types'
 import { VirtualHtmlPage, VirtualPageOptions } from './types'
-import type { UserConfig } from 'vite'
+import type { BuildEnvironmentOptions, UserConfig } from 'vite';
 import { normalizePath } from 'vite'
 import { Base } from './Base'
 import fs, { promises as fsp } from 'fs'
 import path from 'path'
-
+interface Meta {
+  rolldownVersion?:string;
+}
 export class Build extends Base {
   
   _needRemove: Array<string> = []
   _distDir!: string
+  _meta:Meta
   
-  constructor(virtualHtmlOptions: HtmlPluginOptions) {
+  constructor(virtualHtmlOptions: HtmlPluginOptions,meta:Meta) {
     super(virtualHtmlOptions)
+    this._meta = meta
   }
   
   /**
@@ -57,12 +61,17 @@ export class Build extends Base {
     // get custom distDir config,if it is undefined use default config 'dist'
     this._distDir = config.build?.outDir ?? 'dist'
     // inject build.rollupOptions.input from pages directly.
+    let optionKey: keyof Pick<BuildEnvironmentOptions, 'rolldownOptions'|'rollupOptions'>= 'rollupOptions'
+    // @ts-ignore
+    if (this._meta.rolldownVersion) {
+      optionKey = 'rolldownOptions'
+    }
     config.build = {
       ...config.build,
-      rollupOptions: {
-        ...config.build?.rollupOptions,
+      [optionKey]: {
+        ...config.build?.[optionKey],
         input: {
-          ...(config.build?.rollupOptions?.input as object),
+          ...(config.build?.[optionKey]?.input as object),
           ...this.extractHtmlPath(this._pages),
         },
       },

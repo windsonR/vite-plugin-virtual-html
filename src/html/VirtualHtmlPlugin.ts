@@ -20,7 +20,7 @@ export const VirtualHtmlPlugin = (
         }
         _instance = new Serve(_htmlOptions);
       } else if (command === "build") {
-        _instance = new Build(_htmlOptions);
+        _instance = new Build(_htmlOptions,this.meta);
         await _instance._buildConfig.call(_instance, config);
       }
     },
