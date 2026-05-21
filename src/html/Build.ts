@@ -1,11 +1,11 @@
-import type { HtmlPluginOptions } from './types'
-import { VirtualHtmlPage, VirtualPageOptions } from './types'
+import type { HtmlPluginOptions } from './types.js'
+import { VirtualHtmlPage, VirtualPageOptions } from './types.js'
 import type { BuildEnvironmentOptions, UserConfig } from 'vite';
 import { normalizePath } from 'vite'
-import { Base } from './Base'
+import { Base } from './Base.js'
 import fs, { promises as fsp } from 'fs'
 import path from 'path'
-interface Meta {
+export interface Meta {
   rolldownVersion?:string;
 }
 export class Build extends Base {

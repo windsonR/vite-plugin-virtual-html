@@ -15,6 +15,7 @@
     "build": "tsup && npm publish && git clean -f",
     "test:build": "vite build",
     "test:dev": "vite",
+    "test:bundleDev": "vite --config vite.config.bundle.ts",
     "test": "vitest"
   },
   "files": [
@@ -39,7 +40,7 @@
     "@types/debug": "^4.1.12",
     "@types/ejs": "^3.1.5",
     "@types/node": "^22.12.0",
-    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue": "^6.0.6",
     "@vue/compiler-sfc": "^3.5.13",
     "playwright-chromium": "^1.50.0",
     "tsup": "^8.3.6",
@@ -55,6 +56,6 @@
     "ejs": "^3.1.10",
     "fast-glob": "^3.3.3",
     "magic-string": "^0.30.11",
-    "vite": "npm:rolldown-vite@7.1.13"
+    "vite": "^8.0.13"
   }
 }

@@ -1,8 +1,9 @@
-import type { HtmlPluginOptions } from "./types";
+import { Bundle } from './Bundle.js';
+import type { HtmlPluginOptions } from "./types.js";
 import type { ConfigEnv, Plugin, UserConfig } from "vite";
-import type { HistoryApiOptions } from "../history-api/types";
-import { Serve } from "./Serve";
-import { Build } from "./Build";
+import type { HistoryApiOptions } from "../history-api/types.js";
+import { Serve } from "./Serve.js";
+import { Build } from "./Build.js";
 
 export const VirtualHtmlPlugin = (
   virtualHtmlOptions: HtmlPluginOptions & HistoryApiOptions
@@ -17,6 +18,12 @@ export const VirtualHtmlPlugin = (
       if (command === "serve") {
         if (_htmlOptions.useCustom??true) {
           config.appType = "custom";
+        }
+        if (config.experimental?.bundledDev) {
+          config.appType = undefined
+          _instance = new Bundle(_htmlOptions,this.meta)
+          await _instance.bindInput.call(_instance,config)
+          return
         }
         _instance = new Serve(_htmlOptions);
       } else if (command === "build") {
