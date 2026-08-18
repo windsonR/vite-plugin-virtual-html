@@ -1,6 +1,6 @@
 import type { Connect, Plugin, ViteDevServer } from 'vite'
 import history from 'connect-history-api-fallback'
-import type { HistoryApiOptions, HistoryRewrites } from './types'
+import type { HistoryApiOptions, HistoryRewrites } from './types.js'
 
 // noinspection JSUnusedGlobalSymbols
 export const historyApiFallbackPlugin = (historyApiOptions: HistoryApiOptions): Plugin => {

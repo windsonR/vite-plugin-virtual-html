@@ -3,14 +3,14 @@ import type {
   InjectCode,
   PageObject,
   VirtualHtmlTemplateData,
-} from "./types";
+} from "./types.js";
 import {
   Pages,
   POS,
   VirtualHtmlPage,
   VirtualHtmlTemplateRender,
   VirtualPageOptions,
-} from "./types";
+} from "./types.js";
 import { createFilter, normalizePath, type UserConfig } from "vite";
 import * as path from "path";
 import * as fs from "fs";

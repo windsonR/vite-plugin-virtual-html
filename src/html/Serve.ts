@@ -1,9 +1,9 @@
-import type { HtmlPluginOptions, UrlTransformerFunction } from './types'
-import { Base } from './Base'
-import { buildHistoryApiFallback } from '../history-api/historyApiFallbackPlugin'
+import type { HtmlPluginOptions, UrlTransformerFunction } from './types.js'
+import { Base } from './Base.js'
+import { buildHistoryApiFallback } from '../history-api/historyApiFallbackPlugin.js'
 import type { ViteDevServer } from 'vite'
 import { normalizePath, createFilter, } from 'vite'
-import type { HistoryApiOptions, HistoryRewrites } from '../history-api/types'
+import type { HistoryApiOptions, HistoryRewrites } from '../history-api/types.js'
 
 const HTML_INCLUDE = [/\.html$/,/\/$/]
 const HTML_FILTER = createFilter(HTML_INCLUDE)
